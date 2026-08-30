@@ -9,9 +9,9 @@ export default function Onboarding() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
-  const [manualMode, setManualMode] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
   const [speechSupported, setSpeechSupported] = useState(false)
+  const [speechLang, setSpeechLang] = useState('en-IN')
   const recognitionRef = useRef(null)
   const router = useRouter()
   const supabase = createClient()
@@ -32,7 +32,7 @@ export default function Onboarding() {
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new SpeechRecognition()
-    recognition.lang = 'en-US'
+    recognition.lang = speechLang
     recognition.continuous = true
     recognition.interimResults = true
 
@@ -51,9 +51,8 @@ export default function Onboarding() {
     }
 
     recognition.onerror = (event) => {
-      setError(`Speech error: ${event.error}. You can type manually below.`)
+      setError(`Speech error: ${event.error}. You can type in the transcript box below.`)
       setIsListening(false)
-      setManualMode(true)
     }
 
     recognition.onend = () => setIsListening(false)
@@ -111,74 +110,72 @@ export default function Onboarding() {
 
       <main className="max-w-3xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-2">Voice Onboarding</h2>
+          <h2 className="text-lg font-semibold mb-2">Profile Onboarding</h2>
           <p className="text-sm text-gray-600 mb-6">
-            Tell us about yourself — your name, skills, experience, and location. Speak naturally or type below.
+            Tell us about yourself — your name, skills, experience, and location. Type below, or use the mic button to speak.
           </p>
 
           {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">{error}</div>}
 
-          {speechSupported && !manualMode && (
-            <div className="flex flex-col items-center mb-6">
+          {speechSupported && (
+            <div className="flex flex-wrap items-center gap-3 mb-4">
               <button
                 onClick={isListening ? stopListening : startListening}
                 disabled={isProcessing}
-                className={`w-24 h-24 rounded-full flex items-center justify-center text-white text-sm font-medium transition-all ${
+                className={`px-4 py-2 rounded text-white text-sm font-medium transition ${
                   isListening
-                    ? 'bg-red-500 animate-pulse hover:bg-red-600'
+                    ? 'bg-red-500 hover:bg-red-600'
                     : 'bg-blue-600 hover:bg-blue-700'
                 } disabled:opacity-50`}
               >
-                {isListening ? 'Stop' : 'Start'}
+                {isListening ? 'Stop Recording' : 'Use Microphone'}
               </button>
-              <p className="mt-3 text-xs text-gray-500">
-                {isListening ? 'Listening... speak now' : 'Tap to start recording'}
-              </p>
-              <button
-                onClick={() => setManualMode(true)}
-                className="mt-2 text-xs text-blue-600 hover:underline"
+              <select
+                value={speechLang}
+                onChange={(e) => setSpeechLang(e.target.value)}
+                disabled={isListening}
+                className="px-3 py-2 border border-gray-300 rounded text-sm bg-white disabled:opacity-50"
               >
-                Type manually instead
-              </button>
+                <option value="en-IN">English + Roman Urdu (en-IN)</option>
+                <option value="ur-PK">Urdu (ur-PK)</option>
+                <option value="en-US">English (en-US)</option>
+              </select>
+              {isListening && <span className="text-xs text-red-600 animate-pulse">Listening...</span>}
+              {!isListening && (transcript || interim) && (
+                <span className="text-xs text-gray-500">{transcript ? 'Transcript captured' : 'Capturing...'}</span>
+              )}
             </div>
           )}
 
-          {(!speechSupported || manualMode) && (
-            <div className="mb-6">
-              <textarea
-                value={transcript}
-                onChange={(e) => setTranscript(e.target.value)}
-                placeholder="e.g. My name is Ahmed. I am an electrician with 5 years of experience. I work in Lahore and can do wiring, switchboard installation, and fan repair."
-                className="w-full h-40 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              />
-            </div>
-          )}
+          <div className="mb-6">
+            <label className="block text-xs font-medium text-gray-600 mb-1">Transcript</label>
+            <textarea
+              value={transcript}
+              onChange={(e) => setTranscript(e.target.value)}
+              placeholder="e.g. My name is Ahmed. I am an electrician with 5 years of experience. I live in Lahore and can do wiring, switchboard installation, and fan repair."
+              className="w-full h-40 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+            />
+          </div>
 
-          {speechSupported && !manualMode && (transcript || interim) && (
-            <div className="mb-6 p-4 bg-gray-50 rounded">
-              <p className="text-sm font-medium text-gray-700 mb-1">Transcript:</p>
-              <p className="text-sm text-gray-900">{transcript}</p>
-              {interim && <p className="text-sm text-gray-400 italic">{interim}</p>}
-            </div>
-          )}
+          <button
+            onClick={processProfile}
+            disabled={isProcessing || !transcript.trim()}
+            className="w-full py-2 px-4 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+          >
+            {isProcessing ? 'Processing with AI...' : 'Save Profile'}
+          </button>
 
-          <div className="flex gap-3">
-            <button
-              onClick={processProfile}
-              disabled={isProcessing || (!transcript.trim() && !manualMode)}
-              className="flex-1 py-2 px-4 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
-            >
-              {isProcessing ? 'Processing with AI...' : 'Save Profile'}
-            </button>
-            {isSaved && (
+          {isSaved && (
+            <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded">
+              <p className="text-sm text-blue-800 font-medium mb-2">Profile saved successfully!</p>
               <button
                 onClick={() => router.push('/worker/profile')}
-                className="flex-1 py-2 px-4 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm font-medium"
+                className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
               >
-                View Profile
+                Next: View Skill Passport
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {result && (

@@ -23,9 +23,7 @@ export default async function handler(req, res) {
     .eq('id', user.id)
     .single()
 
-  if (profile?.role !== 'worker') {
-    return res.status(403).json({ message: 'Only workers can use voice onboarding' })
-  }
+  const isWorker = profile?.role === 'worker'
 
   try {
     const { extractProfileFromVoice } = await import('@/lib/gemini')
@@ -39,17 +37,19 @@ export default async function handler(req, res) {
       await supabase.from('profiles').update(updateData).eq('id', user.id)
     }
 
-    const workerUpdate = {}
-    if (extracted.skills?.length > 0) workerUpdate.skills = extracted.skills
-    if (extracted.bio) workerUpdate.bio = extracted.bio
+    if (isWorker) {
+      const workerUpdate = {}
+      if (extracted.skills?.length > 0) workerUpdate.skills = extracted.skills
+      if (extracted.bio) workerUpdate.bio = extracted.bio
 
-    if (Object.keys(workerUpdate).length > 0) {
-      await supabase.from('worker_profiles').update(workerUpdate).eq('user_id', user.id)
+      if (Object.keys(workerUpdate).length > 0) {
+        await supabase.from('worker_profiles').update(workerUpdate).eq('user_id', user.id)
+      }
     }
 
     res.status(200).json({
       extracted,
-      message: 'Profile updated from voice input',
+      message: 'Profile updated from transcript input',
     })
   } catch (err) {
     console.error('Voice-to-profile error:', err)
