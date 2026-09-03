@@ -63,9 +63,9 @@ export default function PostJob({ profile }) {
       return
     }
 
-    setSuccess('Job posted successfully')
+    setSuccess('Job posted successfully. View it on your dashboard.')
     setForm({ title: '', description: '', category: '', budget: '', location: '' })
-    setTimeout(() => setSuccess(''), 3000)
+    setTimeout(() => setSuccess(''), 5000)
   }
 
   return (
@@ -73,9 +73,17 @@ export default function PostJob({ profile }) {
       <nav className="bg-white shadow-sm">
         <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold">Rozgar AI</h1>
-          <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
-            Sign Out
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/customer/dashboard')}
+              className="text-sm text-blue-600 hover:underline"
+            >
+              My Dashboard
+            </button>
+            <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+              Sign Out
+            </button>
+          </div>
         </div>
       </nav>
 

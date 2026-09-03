@@ -11,11 +11,21 @@ export default async function handler(req, res) {
   }
 
   const supabase = createClient(req, res)
-  const { error } = await supabase.auth.exchangeCodeForSession(code)
+  const { error, data: { user } } = await supabase.auth.exchangeCodeForSession(code)
 
   if (error) {
     return res.redirect(`/login?error=${encodeURIComponent(error.message)}`)
   }
 
-  res.redirect('/onboarding')
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  if (profile?.role === 'customer') {
+    return res.redirect('/customer/dashboard')
+  }
+
+  res.redirect('/worker/dashboard')
 }

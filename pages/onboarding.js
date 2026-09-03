@@ -185,10 +185,10 @@ export default function Onboarding() {
             <div className="mt-4 p-4 bg-blue-50 border border-blue-100 rounded">
               <p className="text-sm text-blue-800 font-medium mb-2">Profile saved successfully!</p>
               <button
-                onClick={() => router.push('/worker/profile')}
+                onClick={() => router.push('/worker/assessment')}
                 className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium"
               >
-                Next: View Skill Passport
+                Next: AI Skill Assessment
               </button>
             </div>
           )}

@@ -37,5 +37,5 @@ export default async function middleware(request) {
 }
 
 export const config = {
-  matcher: ['/onboarding', '/worker/:path*', '/api/profile/:path*', '/api/onboarding/:path*', '/api/jobs/:path*', '/api/worker/:path*'],
+  matcher: ['/onboarding', '/api/profile/:path*', '/api/onboarding/:path*', '/api/jobs/:path*', '/api/worker/:path*'],
 }

@@ -109,8 +109,9 @@ alter table applications enable row level security;
 alter table ai_matches enable row level security;
 alter table ratings enable row level security;
 
--- Profiles: users can read all, update own
+-- Profiles: users can read all, insert/update own
 create policy "Public profiles readable" on profiles for select using (true);
+create policy "Users insert own profile" on profiles for insert with check (auth.uid() = id);
 create policy "Users update own profile" on profiles for update using (auth.uid() = id);
 
 -- Worker profiles: readable by all, editable by owner

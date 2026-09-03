@@ -11,21 +11,35 @@ export async function getServerSideProps(context) {
     return { redirect: { destination: '/login', permanent: false } }
   }
 
-  const { data: profile } = await supabase
+  let { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
 
-  if (!profile || profile.role !== 'worker') {
+  if (!profile) {
+    return { redirect: { destination: '/onboarding', permanent: false } }
+  }
+
+  if (profile.role !== 'worker') {
     return { redirect: { destination: '/login', permanent: false } }
   }
 
-  const { data: workerProfile } = await supabase
+  let { data: workerProfile } = await supabase
     .from('worker_profiles')
     .select('*')
     .eq('user_id', user.id)
     .single()
+
+  if (!workerProfile) {
+    const { data: newWorkerProfile, error: createError } = await supabase
+      .from('worker_profiles')
+      .insert({ user_id: user.id })
+      .select('*')
+      .single()
+    if (createError) throw createError
+    workerProfile = newWorkerProfile
+  }
 
   return {
     props: {
@@ -123,16 +137,24 @@ export default function Assessment({ profile, workerProfile }) {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">AI Skill Assessment</h2>
             <button
-              onClick={() => router.push('/worker/profile')}
+              onClick={() => router.push('/worker/dashboard')}
               className="text-sm text-blue-600 hover:underline"
             >
-              Back to Skill Passport
+              Back to Dashboard
             </button>
           </div>
 
-          <p className="text-sm text-gray-600 mb-6">
-            AI will ask 3 practical questions based on your skills: {workerProfile?.skills?.join(', ') || 'general labor'}.
-          </p>
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-100 rounded">
+            <h3 className="font-medium text-blue-900 mb-1">{profile?.name || 'Worker Profile'}</h3>
+            <p className="text-sm text-blue-800">
+              Skills: {workerProfile?.skills?.join(', ') || 'general labor'}
+            </p>
+            {workerProfile?.experience_years != null && (
+              <p className="text-sm text-blue-800 mt-1">
+                Experience: {workerProfile.experience_years} years
+              </p>
+            )}
+          </div>
 
           {scores && Object.keys(scores).length > 0 && (
             <div className="mb-6 p-4 bg-green-50 border border-green-100 rounded">
@@ -162,12 +184,20 @@ export default function Assessment({ profile, workerProfile }) {
                 {loading ? 'Preparing Questions...' : scores ? 'Retake Assessment' : 'Start Assessment'}
               </button>
               {scores && (
-                <button
-                  onClick={() => router.push('/worker/jobs')}
-                  className="w-full py-2 px-4 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
-                >
-                  Find Matching Jobs
-                </button>
+                <>
+                  <button
+                    onClick={() => router.push('/worker/jobs')}
+                    className="w-full py-2 px-4 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
+                  >
+                    Find Matching Jobs
+                  </button>
+                  <button
+                    onClick={() => router.push('/worker/dashboard')}
+                    className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm font-medium"
+                  >
+                    Go to Dashboard
+                  </button>
+                </>
               )}
             </div>
           ) : (

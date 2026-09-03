@@ -10,13 +10,14 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+  const message = router.query.message
 
   async function handleLogin(e) {
     e.preventDefault()
     setLoading(true)
     setError('')
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error, data } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
       setError(error.message)
@@ -24,7 +25,12 @@ export default function Login() {
       return
     }
 
-    router.push('/onboarding')
+    const role = data?.user?.user_metadata?.role
+    if (role === 'customer') {
+      router.push('/customer/dashboard')
+    } else {
+      router.push('/worker/dashboard')
+    }
   }
 
   return (
@@ -32,6 +38,12 @@ export default function Login() {
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow">
         <h1 className="text-2xl font-bold text-center mb-6">Rozgar AI</h1>
         <h2 className="text-lg text-center text-gray-600 mb-8">Sign In</h2>
+
+        {message === 'check-email' && (
+          <div className="mb-4 p-3 bg-green-50 text-green-700 rounded text-sm">
+            Account created. Please check your email to confirm before signing in.
+          </div>
+        )}
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">{error}</div>

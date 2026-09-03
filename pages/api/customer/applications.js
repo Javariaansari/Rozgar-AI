@@ -1,0 +1,56 @@
+import { createClient } from '@/lib/supabaseServer'
+
+export default async function handler(req, res) {
+  if (req.method !== 'PUT') {
+    return res.status(405).json({ message: 'Method not allowed' })
+  }
+
+  const supabase = createClient(req, res)
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+  if (authError || !user) {
+    return res.status(401).json({ message: 'Not authenticated' })
+  }
+
+  const { application_id, status } = req.body
+  if (!application_id || !['selected', 'rejected'].includes(status)) {
+    return res.status(400).json({ message: 'Application ID and valid status required' })
+  }
+
+  const { data: application, error: appError } = await supabase
+    .from('applications')
+    .select('id, job_id, jobs!inner(customer_id)')
+    .eq('id', application_id)
+    .single()
+
+  if (appError || !application) {
+    return res.status(404).json({ message: 'Application not found' })
+  }
+
+  if (application.jobs.customer_id !== user.id) {
+    return res.status(403).json({ message: 'Only the job owner can update applications' })
+  }
+
+  if (status === 'selected') {
+    const { error: rejectOthersError } = await supabase
+      .from('applications')
+      .update({ status: 'rejected' })
+      .eq('job_id', application.job_id)
+      .neq('id', application_id)
+
+    if (rejectOthersError) {
+      return res.status(500).json({ message: rejectOthersError.message })
+    }
+  }
+
+  const { error } = await supabase
+    .from('applications')
+    .update({ status })
+    .eq('id', application_id)
+
+  if (error) {
+    return res.status(500).json({ message: error.message })
+  }
+
+  res.status(200).json({ message: `Application ${status}` })
+}

@@ -7,9 +7,27 @@ export default function Home() {
   const supabase = createClient()
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      router.replace(user ? '/onboarding' : '/login')
-    })
+    async function redirect() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        router.replace('/login')
+        return
+      }
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      if (profile?.role === 'customer') {
+        router.replace('/customer/dashboard')
+      } else {
+        router.replace('/worker/dashboard')
+      }
+    }
+
+    redirect()
   }, [router, supabase])
 
   return (

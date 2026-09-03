@@ -133,9 +133,17 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
       <nav className="bg-white shadow-sm">
         <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold">Rozgar AI</h1>
-          <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
-            Sign Out
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.push('/worker/dashboard')}
+              className="text-sm text-blue-600 hover:underline"
+            >
+              Dashboard
+            </button>
+            <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+              Sign Out
+            </button>
+          </div>
         </div>
       </nav>
 

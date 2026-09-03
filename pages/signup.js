@@ -17,7 +17,7 @@ export default function Signup() {
     setLoading(true)
     setError('')
 
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -31,7 +31,16 @@ export default function Signup() {
       return
     }
 
-    router.push('/onboarding')
+    if (!data?.session) {
+      router.push('/login?message=check-email')
+      return
+    }
+
+    if (role === 'customer') {
+      router.push('/customer/dashboard')
+    } else {
+      router.push('/worker/dashboard')
+    }
   }
 
   return (
