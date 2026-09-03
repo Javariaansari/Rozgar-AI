@@ -140,17 +140,25 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold">Digital Skill Passport</h2>
-            <button
-              onClick={() => editing ? handleSave() : setEditing(true)}
-              disabled={uploading}
-              className={`px-4 py-1.5 rounded text-sm font-medium ${
-                editing
-                  ? 'bg-green-600 text-white hover:bg-green-700'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              } disabled:opacity-50`}
-            >
-              {editing ? 'Save' : 'Edit'}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => router.push('/worker/assessment')}
+                className="px-4 py-1.5 rounded text-sm font-medium bg-blue-100 text-blue-700 hover:bg-blue-200"
+              >
+                AI Assessment
+              </button>
+              <button
+                onClick={() => editing ? handleSave() : setEditing(true)}
+                disabled={uploading}
+                className={`px-4 py-1.5 rounded text-sm font-medium ${
+                  editing
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                } disabled:opacity-50`}
+              >
+                {editing ? 'Save' : 'Edit'}
+              </button>
+            </div>
           </div>
 
           <div className="flex items-start gap-6 mb-6">
@@ -224,7 +232,7 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Bio</label>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Professional Summary</label>
               {editing ? (
                 <textarea
                   value={form.bio}
@@ -236,6 +244,15 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
                 <p className="text-sm text-gray-700">{workerProfile?.bio || 'No bio set'}</p>
               )}
             </div>
+
+            {workerProfile?.voice_transcript && !editing && (
+              <div className="bg-gray-50 border border-gray-200 rounded p-4">
+                <label className="block text-xs font-medium text-gray-600 mb-2">Voice Resume Transcript</label>
+                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap" dir="auto">
+                  {workerProfile.voice_transcript}
+                </p>
+              </div>
+            )}
 
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">CNIC / ID Document</label>

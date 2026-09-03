@@ -41,10 +41,9 @@ export default async function handler(req, res) {
       const workerUpdate = {}
       if (extracted.skills?.length > 0) workerUpdate.skills = extracted.skills
       if (extracted.bio) workerUpdate.bio = extracted.bio
+      workerUpdate.voice_transcript = text.trim()
 
-      if (Object.keys(workerUpdate).length > 0) {
-        await supabase.from('worker_profiles').update(workerUpdate).eq('user_id', user.id)
-      }
+      await supabase.from('worker_profiles').update(workerUpdate).eq('user_id', user.id)
     }
 
     res.status(200).json({

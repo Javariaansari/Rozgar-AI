@@ -16,6 +16,7 @@ create table worker_profiles (
   user_id uuid references profiles(id) on delete cascade not null unique,
   skills text[] default '{}',
   bio text,
+  voice_transcript text,
   profile_pic_url text,
   cnic_verified boolean default false,
   ai_skill_score jsonb default '{}'
