@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('*')
+    .select('role')
     .eq('id', user.id)
     .single()
 
@@ -18,40 +18,24 @@ export default async function handler(req, res) {
     return res.status(403).json({ message: 'Worker profile required' })
   }
 
-  if (req.method === 'GET') {
-    const { data: workerProfile } = await supabase
+  if (req.method === 'DELETE') {
+    const { error } = await supabase
       .from('worker_profiles')
-      .select('*')
+      .update({
+        skills: [],
+        bio: null,
+        experience_years: null,
+        location: null,
+        voice_transcript: null,
+        ai_skill_score: null,
+      })
       .eq('user_id', user.id)
-      .single()
 
-    return res.status(200).json({ profile, workerProfile })
-  }
-
-  if (req.method === 'PUT') {
-    const { name, phone, skills, bio, experience_years, location } = req.body
-
-    const profileUpdate = {}
-    if (name !== undefined) profileUpdate.name = name
-    if (phone !== undefined) profileUpdate.phone = phone
-
-    if (Object.keys(profileUpdate).length > 0) {
-      const { error } = await supabase.from('profiles').update(profileUpdate).eq('id', user.id)
-      if (error) return res.status(500).json({ message: error.message })
+    if (error) {
+      return res.status(500).json({ message: error.message })
     }
 
-    const workerUpdate = {}
-    if (skills !== undefined) workerUpdate.skills = skills
-    if (bio !== undefined) workerUpdate.bio = bio
-    if (experience_years !== undefined) workerUpdate.experience_years = experience_years ? Number(experience_years) : null
-    if (location !== undefined) workerUpdate.location = location
-
-    if (Object.keys(workerUpdate).length > 0) {
-      const { error } = await supabase.from('worker_profiles').update(workerUpdate).eq('user_id', user.id)
-      if (error) return res.status(500).json({ message: error.message })
-    }
-
-    return res.status(200).json({ message: 'Profile updated' })
+    return res.status(200).json({ message: 'Resume cleared' })
   }
 
   res.status(405).json({ message: 'Method not allowed' })

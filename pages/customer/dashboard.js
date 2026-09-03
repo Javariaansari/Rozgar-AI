@@ -65,6 +65,7 @@ export default function CustomerDashboard({ profile, customerProfile }) {
   const [editingJobId, setEditingJobId] = useState(null)
   const [editForm, setEditForm] = useState({})
   const [isSavingEdit, setIsSavingEdit] = useState(false)
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
   const recognitionRef = useRef(null)
 
   const router = useRouter()
@@ -297,6 +298,25 @@ export default function CustomerDashboard({ profile, customerProfile }) {
     }
 
     loadJobs()
+  }
+
+  async function deleteAccount() {
+    if (!window.confirm('Are you sure you want to permanently delete your account? This cannot be undone.')) {
+      return
+    }
+
+    setIsDeletingAccount(true)
+    setError('')
+    const res = await fetch('/api/account/delete', { method: 'POST' })
+    const data = await res.json()
+    setIsDeletingAccount(false)
+
+    if (!res.ok) {
+      setError(data.message || 'Failed to delete account')
+      return
+    }
+
+    router.push('/login')
   }
 
   const statusBadge = (status) => {
@@ -656,10 +676,10 @@ export default function CustomerDashboard({ profile, customerProfile }) {
                     ))}
                   </div>
 
-                  {job.status === 'open' && selectedApplicant && (
+                  {job.status === 'in_progress' && selectedApplicant && (
                     <div className="mt-5 pt-5 border-t border-gray-100">
                       <p className="text-sm font-medium text-gray-900 mb-2">
-                        Mark job as completed and rate {selectedApplicant.worker?.name || 'the worker'}
+                        Work done? Rate {selectedApplicant.worker?.name || 'the worker'} and complete the job
                       </p>
                       <div className="flex flex-wrap items-center gap-3">
                         <select
@@ -697,6 +717,20 @@ export default function CustomerDashboard({ profile, customerProfile }) {
               </div>
             )
           })}
+        </div>
+
+        <div className="mt-8 bg-white rounded-lg shadow p-5 border border-red-100">
+          <h3 className="text-sm font-bold text-red-700 uppercase tracking-wide mb-2">Danger Zone</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            Deleting your account will permanently remove your profile and data.
+          </p>
+          <button
+            onClick={deleteAccount}
+            disabled={isDeletingAccount}
+            className="px-4 py-2 bg-red-600 text-white rounded text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+          >
+            {isDeletingAccount ? 'Deleting Account...' : '⚠️ Delete Account'}
+          </button>
         </div>
       </main>
     </div>

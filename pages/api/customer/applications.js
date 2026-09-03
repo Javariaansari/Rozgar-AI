@@ -41,6 +41,15 @@ export default async function handler(req, res) {
     if (rejectOthersError) {
       return res.status(500).json({ message: rejectOthersError.message })
     }
+
+    const { error: jobStatusError } = await supabase
+      .from('jobs')
+      .update({ status: 'in_progress' })
+      .eq('id', application.job_id)
+
+    if (jobStatusError) {
+      return res.status(500).json({ message: jobStatusError.message })
+    }
   }
 
   const { error } = await supabase

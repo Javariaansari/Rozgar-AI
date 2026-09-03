@@ -21,7 +21,9 @@ create table worker_profiles (
   location text,
   profile_pic_url text,
   cnic_verified boolean default false,
-  ai_skill_score jsonb default '{}'
+  ai_skill_score jsonb default '{}',
+  average_rating numeric,
+  total_reviews int default 0
 );
 
 -- Customer profiles
@@ -74,6 +76,43 @@ create table ratings (
   review_text text,
   created_at timestamptz default now()
 );
+
+-- ============================================================
+-- Auto-update worker resume rating stats when a rating changes
+-- ============================================================
+create or replace function public.update_worker_rating_stats()
+returns trigger as $$
+declare
+  target_user_id uuid;
+begin
+  if TG_OP = 'DELETE' then
+    target_user_id := OLD.to_user_id;
+  else
+    target_user_id := NEW.to_user_id;
+  end if;
+
+  update public.worker_profiles
+  set
+    average_rating = (
+      select round(avg(stars)::numeric, 2)
+      from public.ratings
+      where to_user_id = target_user_id
+    ),
+    total_reviews = (
+      select count(*)
+      from public.ratings
+      where to_user_id = target_user_id
+    )
+  where user_id = target_user_id;
+
+  return null;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists on_rating_changed on public.ratings;
+create trigger on_rating_changed
+after insert or update or delete on public.ratings
+for each row execute function public.update_worker_rating_stats();
 
 -- ============================================================
 -- Auto-create profile on signup

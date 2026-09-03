@@ -37,15 +37,42 @@ export async function getServerSideProps(context) {
     workerProfile = newWorkerProfile
   }
 
+  const { data: reviews } = await supabase
+    .from('ratings')
+    .select('id, stars, review_text, created_at, job_id, from_user_id')
+    .eq('to_user_id', user.id)
+    .order('created_at', { ascending: false })
+
+  let enrichedReviews = reviews || []
+  if (enrichedReviews.length > 0) {
+    const reviewerIds = [...new Set(enrichedReviews.map((r) => r.from_user_id))]
+    const jobIds = [...new Set(enrichedReviews.map((r) => r.job_id))]
+
+    const [{ data: reviewers }, { data: jobs }] = await Promise.all([
+      supabase.from('profiles').select('id, name').in('id', reviewerIds),
+      supabase.from('jobs').select('id, title').in('id', jobIds),
+    ])
+
+    const reviewerMap = Object.fromEntries((reviewers || []).map((p) => [p.id, p.name]))
+    const jobMap = Object.fromEntries((jobs || []).map((j) => [j.id, j.title]))
+
+    enrichedReviews = enrichedReviews.map((r) => ({
+      ...r,
+      reviewer_name: reviewerMap[r.from_user_id] || 'Customer',
+      job_title: jobMap[r.job_id] || 'Job',
+    }))
+  }
+
   return {
     props: {
       profile: profile || null,
       workerProfile: workerProfile || null,
+      reviews: enrichedReviews,
     },
   }
 }
 
-export default function WorkerDashboard({ profile, workerProfile }) {
+export default function WorkerDashboard({ profile, workerProfile, reviews = [] }) {
   const router = useRouter()
   const supabase = createClient()
 
@@ -58,6 +85,7 @@ export default function WorkerDashboard({ profile, workerProfile }) {
   const [speechSupported, setSpeechSupported] = useState(false)
   const [speechLang, setSpeechLang] = useState('en-IN')
   const recognitionRef = useRef(null)
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
 
   const isProfileIncomplete = !profile?.name || !workerProfile?.skills?.length
 
@@ -136,6 +164,43 @@ export default function WorkerDashboard({ profile, workerProfile }) {
 
   async function handleLogout() {
     await supabase.auth.signOut()
+    router.push('/login')
+  }
+
+  async function deleteResume() {
+    if (!window.confirm('Are you sure you want to clear your resume? This will remove skills, bio, experience, and voice transcript.')) {
+      return
+    }
+
+    const res = await fetch('/api/worker/profile', {
+      method: 'DELETE',
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      alert(data.message || 'Failed to clear resume')
+      return
+    }
+
+    router.reload()
+  }
+
+  async function deleteAccount() {
+    if (!window.confirm('Are you sure you want to permanently delete your account? This cannot be undone.')) {
+      return
+    }
+
+    setIsDeletingAccount(true)
+    const res = await fetch('/api/account/delete', { method: 'POST' })
+    const data = await res.json()
+    setIsDeletingAccount(false)
+
+    if (!res.ok) {
+      alert(data.message || 'Failed to delete account')
+      return
+    }
+
     router.push('/login')
   }
 
@@ -282,6 +347,9 @@ export default function WorkerDashboard({ profile, workerProfile }) {
                     {workerProfile?.experience_years != null && (
                       <span>🛠️ {workerProfile.experience_years} yrs exp</span>
                     )}
+                    {workerProfile?.total_reviews > 0 && (
+                      <span>⭐ {workerProfile.average_rating} ({workerProfile.total_reviews} review{workerProfile.total_reviews > 1 ? 's' : ''})</span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -344,6 +412,37 @@ export default function WorkerDashboard({ profile, workerProfile }) {
                   {workerProfile?.cnic_verified ? '✅ CNIC Verified' : '⏳ CNIC Not Verified'}
                 </span>
               </section>
+
+              <section>
+                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">
+                  Reviews & Ratings
+                </h4>
+                {reviews.length > 0 ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl font-bold text-gray-900">
+                        {(reviews.reduce((a, r) => a + r.stars, 0) / reviews.length).toFixed(1)}
+                      </span>
+                      <span className="text-yellow-500">{'★'.repeat(Math.round(reviews.reduce((a, r) => a + r.stars, 0) / reviews.length))}</span>
+                      <span className="text-sm text-gray-500">({reviews.length} review{reviews.length > 1 ? 's' : ''})</span>
+                    </div>
+                    {reviews.map((review) => (
+                      <div key={review.id} className="bg-gray-50 border border-gray-200 rounded p-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-gray-900">{review.reviewer_name}</span>
+                          <span className="text-xs text-yellow-600 font-medium">{'★'.repeat(review.stars)}</span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-0.5">{review.job_title}</p>
+                        {review.review_text && (
+                          <p className="text-sm text-gray-700 mt-2 leading-relaxed">{review.review_text}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-400">No reviews yet.</p>
+                )}
+              </section>
             </div>
           </div>
 
@@ -401,6 +500,19 @@ export default function WorkerDashboard({ profile, workerProfile }) {
                   className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-gray-50 text-gray-700 hover:bg-gray-100"
                 >
                   🧠 AI Skill Assessment
+                </button>
+                <button
+                  onClick={deleteResume}
+                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-red-50 text-red-700 hover:bg-red-100"
+                >
+                  🗑️ Clear Resume
+                </button>
+                <button
+                  onClick={deleteAccount}
+                  disabled={isDeletingAccount}
+                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
+                >
+                  {isDeletingAccount ? 'Deleting Account...' : '⚠️ Delete Account'}
                 </button>
               </div>
             </div>
