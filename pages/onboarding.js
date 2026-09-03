@@ -147,6 +147,22 @@ export default function Onboarding() {
             </div>
           )}
 
+          {(isListening || transcript || interim) && (
+            <div className="mb-6 p-4 bg-gray-900 text-white rounded-lg min-h-[96px]">
+              <div className="flex items-center gap-2 mb-2">
+                <span className={`inline-block w-2 h-2 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
+                <span className="text-xs font-medium text-gray-300">
+                  {isListening ? 'Live transcript' : 'Transcript preview'}
+                </span>
+              </div>
+              <p className="text-base leading-relaxed whitespace-pre-wrap" dir="auto">
+                {transcript}
+                {interim && <span className="text-gray-400"> {interim}</span>}
+                {!transcript && !interim && <span className="text-gray-500 italic">Start speaking...</span>}
+              </p>
+            </div>
+          )}
+
           <div className="mb-6">
             <label className="block text-xs font-medium text-gray-600 mb-1">Transcript</label>
             <textarea
