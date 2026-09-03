@@ -153,13 +153,23 @@ export default function Assessment({ profile, workerProfile }) {
           )}
 
           {questions.length === 0 ? (
-            <button
-              onClick={startAssessment}
-              disabled={loading}
-              className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
-            >
-              {loading ? 'Preparing Questions...' : scores ? 'Retake Assessment' : 'Start Assessment'}
-            </button>
+            <div className="space-y-3">
+              <button
+                onClick={startAssessment}
+                disabled={loading}
+                className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
+              >
+                {loading ? 'Preparing Questions...' : scores ? 'Retake Assessment' : 'Start Assessment'}
+              </button>
+              {scores && (
+                <button
+                  onClick={() => router.push('/worker/jobs')}
+                  className="w-full py-2 px-4 bg-green-600 text-white rounded hover:bg-green-700 text-sm font-medium"
+                >
+                  Find Matching Jobs
+                </button>
+              )}
+            </div>
           ) : (
             <div className="space-y-4">
               {questions.map((q, i) => (
