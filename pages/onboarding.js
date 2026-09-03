@@ -195,23 +195,47 @@ export default function Onboarding() {
         </div>
 
         {result && (
-          <div className="mt-6 bg-white rounded-lg shadow p-6">
-            <h3 className="font-semibold mb-3">AI Extracted Profile</h3>
-            <div className="space-y-2 text-sm">
-              {result.name && <p><span className="font-medium text-gray-700">Name:</span> {result.name}</p>}
-              {result.skills?.length > 0 && (
-                <p>
-                  <span className="font-medium text-gray-700">Skills:</span>{' '}
-                  {result.skills.map((s, i) => (
-                    <span key={i} className="inline-block bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-xs mr-1 mb-1">{s}</span>
-                  ))}
-                </p>
-              )}
-              {result.experience_years != null && (
-                <p><span className="font-medium text-gray-700">Experience:</span> {result.experience_years} years</p>
-              )}
-              {result.bio && <p><span className="font-medium text-gray-700">Bio:</span> {result.bio}</p>}
-              {result.location && <p><span className="font-medium text-gray-700">Location:</span> {result.location}</p>}
+          <div className="mt-6 bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-gradient-to-r from-blue-700 to-blue-500 px-6 py-8 text-white">
+              <h3 className="text-2xl font-bold">{result.name || 'Your Skill Passport'}</h3>
+              <p className="text-blue-100 mt-1">
+                {result.skills?.slice(0, 3).join(' • ') || 'General Labor'}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-3 text-sm text-blue-50">
+                {result.location && <span>Location: {result.location}</span>}
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              <section>
+                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Professional Summary</h4>
+                <p className="text-sm text-gray-700 leading-relaxed">{result.bio || 'No summary provided.'}</p>
+              </section>
+
+              <section>
+                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Skills</h4>
+                <div className="flex flex-wrap gap-2">
+                  {result.skills?.length > 0 ? result.skills.map((skill, i) => (
+                    <span key={i} className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm font-medium border border-blue-100">{skill}</span>
+                  )) : (
+                    <span className="text-sm text-gray-400">No skills extracted</span>
+                  )}
+                </div>
+              </section>
+
+              <section>
+                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Experience</h4>
+                <div className="text-sm text-gray-700">
+                  {result.experience_years != null ? (
+                    <>
+                      <p className="font-medium">{result.experience_years} years</p>
+                      <p className="text-gray-600 mt-1">Hands-on experience in {result.skills?.join(', ') || 'the listed skills'}.</p>
+                    </>
+                  ) : (
+                    <p className="text-gray-500">Experience not specified.</p>
+                  )}
+                </div>
+              </section>
             </div>
           </div>
         )}

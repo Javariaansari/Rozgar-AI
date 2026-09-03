@@ -31,7 +31,6 @@ export default async function handler(req, res) {
 
     const updateData = {}
     if (extracted.name) updateData.name = extracted.name
-    if (extracted.location) updateData.phone = extracted.location
 
     if (Object.keys(updateData).length > 0) {
       await supabase.from('profiles').update(updateData).eq('id', user.id)
@@ -41,6 +40,8 @@ export default async function handler(req, res) {
       const workerUpdate = {}
       if (extracted.skills?.length > 0) workerUpdate.skills = extracted.skills
       if (extracted.bio) workerUpdate.bio = extracted.bio
+      if (extracted.experience_years != null) workerUpdate.experience_years = extracted.experience_years
+      if (extracted.location) workerUpdate.location = extracted.location
       workerUpdate.voice_transcript = text.trim()
 
       await supabase.from('worker_profiles').update(workerUpdate).eq('user_id', user.id)

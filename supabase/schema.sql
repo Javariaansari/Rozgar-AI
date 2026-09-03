@@ -17,6 +17,8 @@ create table worker_profiles (
   skills text[] default '{}',
   bio text,
   voice_transcript text,
+  experience_years int,
+  location text,
   profile_pic_url text,
   cnic_verified boolean default false,
   ai_skill_score jsonb default '{}'

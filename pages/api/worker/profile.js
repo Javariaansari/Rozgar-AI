@@ -29,7 +29,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'PUT') {
-    const { name, phone, skills, bio } = req.body
+    const { name, phone, skills, bio, experience_years, location } = req.body
 
     const profileUpdate = {}
     if (name !== undefined) profileUpdate.name = name
@@ -43,6 +43,8 @@ export default async function handler(req, res) {
     const workerUpdate = {}
     if (skills !== undefined) workerUpdate.skills = skills
     if (bio !== undefined) workerUpdate.bio = bio
+    if (experience_years !== undefined) workerUpdate.experience_years = experience_years ? Number(experience_years) : null
+    if (location !== undefined) workerUpdate.location = location
 
     if (Object.keys(workerUpdate).length > 0) {
       const { error } = await supabase.from('worker_profiles').update(workerUpdate).eq('user_id', user.id)
