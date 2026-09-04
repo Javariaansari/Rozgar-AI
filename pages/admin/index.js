@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 import { requireAdminPage } from '@/lib/requireAdmin'
 import AdminLayout from '@/components/AdminLayout'
+import {
+  ChartCard,
+  BarList,
+  DonutChart,
+  ProgressRing,
+  CHART_COLORS,
+} from '@/components/AdminCharts'
 
 function StatCard({ label, value }) {
   return (
@@ -24,6 +31,34 @@ function StatusBadge({ status }) {
       {label}
     </span>
   )
+}
+
+function humanizeLabel(key) {
+  return key === 'under_review' ? 'under review' : key.replace(/_/g, ' ')
+}
+
+function buildStatusItems(counts, keys) {
+  return keys
+    .map((key) => ({
+      label: humanizeLabel(key),
+      value: counts[key] || 0,
+      color: CHART_COLORS[key] || CHART_COLORS.other,
+    }))
+    .filter((item) => item.value > 0)
+}
+
+function buildStarHistogram(ratings) {
+  const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+  ratings.forEach((r) => {
+    if (counts[r.stars] !== undefined) counts[r.stars]++
+  })
+  return Object.entries(counts)
+    .reverse()
+    .map(([stars, value]) => ({
+      label: `${stars} star${stars === '1' ? '' : 's'}`,
+      value,
+      color: CHART_COLORS.completed,
+    }))
 }
 
 export default function AdminDashboard({ profile }) {
@@ -91,6 +126,71 @@ export default function AdminDashboard({ profile }) {
             <StatCard label="CNIC Pending" value={stats.workers.cnic_pending} />
             <StatCard label="CNIC Verified" value={stats.workers.cnic_verified} />
           </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <ChartCard
+              title="Jobs by Status"
+              footer={stats.jobs.flagged > 0 ? `${stats.jobs.flagged} job(s) flagged` : null}
+            >
+              <BarList
+                items={buildStatusItems(stats.jobs, ['open', 'in_progress', 'completed', 'cancelled'])}
+              />
+            </ChartCard>
+
+            <ChartCard
+              title="Users by Role"
+              footer={stats.users.banned > 0 ? `${stats.users.banned} user(s) banned` : null}
+            >
+              <DonutChart
+                segments={buildStatusItems(stats.users, ['worker', 'customer', 'admin'])}
+                total={stats.users.total}
+                centerLabel="Total"
+                centerValue={stats.users.total}
+              />
+            </ChartCard>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <ChartCard title="Disputes by Status">
+              <BarList
+                items={buildStatusItems(stats.disputes, [
+                  'open',
+                  'under_review',
+                  'resolved',
+                  'rejected',
+                ])}
+              />
+            </ChartCard>
+
+            <ChartCard title="CNIC Verification">
+              <DonutChart
+                segments={[
+                  { label: 'Verified', value: stats.workers.cnic_verified, color: CHART_COLORS.verified },
+                  { label: 'Pending', value: stats.workers.cnic_pending, color: CHART_COLORS.pending },
+                ]}
+                centerLabel="Verified"
+                centerValue={`${
+                  stats.workers.cnic_verified + stats.workers.cnic_pending > 0
+                    ? Math.round(
+                        (stats.workers.cnic_verified /
+                          (stats.workers.cnic_verified + stats.workers.cnic_pending)) *
+                          100
+                      )
+                    : 0
+                }%`}
+              />
+            </ChartCard>
+
+            <ChartCard title="Job Completion Rate">
+              <ProgressRing value={stats.jobs.completed} total={stats.jobs.total} label="Completed" />
+            </ChartCard>
+          </div>
+
+          {stats.recent_ratings.length > 0 && (
+            <ChartCard title="Last 10 Ratings Spread">
+              <BarList items={buildStarHistogram(stats.recent_ratings)} />
+            </ChartCard>
+          )}
 
           <div className="grid md:grid-cols-2 gap-6">
             <section className="bg-white rounded-lg shadow p-5">
