@@ -1,40 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Rozgar AI
+
+MVP job marketplace for blue-collar workers and customers in Pakistan. Workers build a voice-powered Digital Skill Passport, customers post jobs by voice or form, and AI matches the best worker for each job.
+
+## Stack
+
+- Next.js Pages Router
+- Tailwind CSS
+- Supabase Auth + PostgreSQL + Storage
+- Gemini AI (optional mock mode)
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Copy `.env.local.example` to `.env.local` and fill in real values:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+GEMINI_API_KEY=your-gemini-key
+MOCK_AI=true
+```
+
+`SUPABASE_SERVICE_ROLE_KEY` is required for admin panel mutations (ban/delete users, manage disputes).
+
+3. Run migrations in Supabase SQL Editor in this order:
+
+- `supabase/schema.sql` (or the numbered migration files in `supabase/migrations/`)
+- `supabase/migrations/20260903_add_ratings_to_resume.sql`
+- `supabase/migrations/20260910_admin_panel.sql`
+
+4. Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Creating the first admin
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Admins cannot self-register. To promote an existing account:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+1. Sign up as a worker or customer with the email you want to use as admin.
+2. Open `supabase/seed_admin.sql`, replace `admin@rozgar.ai` with that email.
+3. Run the SQL in the Supabase SQL Editor.
+4. Sign out and sign back in — you will be redirected to `/admin`.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Key pages
 
-## Learn More
+- `/login`, `/signup` — auth
+- `/worker/dashboard` — worker home + voice resume + applications + disputes
+- `/worker/profile` — Digital Skill Passport + CNIC upload
+- `/worker/jobs` — AI job matches
+- `/customer/dashboard` — posted jobs + applicants + disputes
+- `/customer/post-job` — post a job
+- `/admin` — admin panel (users, jobs, disputes, stats)
 
-To learn more about Next.js, take a look at the following resources:
+## Build
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+```bash
+npm run build
+```

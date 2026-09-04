@@ -122,6 +122,8 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
 
     if (type === 'profile_pic') {
       setWorkerProfile(w => ({ ...w, profile_pic_url: data.url }))
+    } else if (type === 'cnic') {
+      setWorkerProfile(w => ({ ...w, cnic_url: data.url, cnic_verified: false, cnic_verified_at: null, cnic_verified_by: null }))
     }
 
     setSuccess(`${type === 'profile_pic' ? 'Profile photo' : 'CNIC'} uploaded`)
@@ -351,19 +353,37 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
 
                 <section>
                   <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Trust & Verification</h4>
-                  <div className="flex items-center gap-3">
-                    <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                      workerProfile?.cnic_verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {workerProfile?.cnic_verified ? '✅ CNIC Verified' : '⏳ CNIC Not Verified'}
-                    </span>
+                  <div className="flex flex-wrap items-center gap-3">
+                    {workerProfile?.cnic_verified ? (
+                      <span className="text-xs px-3 py-1 rounded-full font-medium bg-green-100 text-green-800">
+                        ✅ CNIC Verified
+                      </span>
+                    ) : workerProfile?.cnic_url ? (
+                      <span className="text-xs px-3 py-1 rounded-full font-medium bg-yellow-100 text-yellow-800">
+                        ⏳ Awaiting admin verification
+                      </span>
+                    ) : (
+                      <span className="text-xs px-3 py-1 rounded-full font-medium bg-gray-100 text-gray-800">
+                        ⏳ CNIC Not Verified
+                      </span>
+                    )}
+                    {workerProfile?.cnic_url && (
+                      <a
+                        href={workerProfile.cnic_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:underline"
+                      >
+                        View uploaded CNIC
+                      </a>
+                    )}
                     <input ref={cnicInputRef} type="file" accept="image/*,.pdf" className="hidden" onChange={(e) => handleUpload(e, 'cnic')} />
                     <button
                       onClick={() => cnicInputRef.current?.click()}
                       disabled={uploading}
                       className="text-xs text-blue-600 hover:underline disabled:opacity-50"
                     >
-                      {uploading ? 'Uploading...' : 'Upload CNIC'}
+                      {uploading ? 'Uploading...' : (workerProfile?.cnic_url ? 'Re-upload CNIC' : 'Upload CNIC')}
                     </button>
                   </div>
                 </section>

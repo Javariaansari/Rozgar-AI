@@ -23,6 +23,10 @@ export default async function handler(req, res) {
     .eq('id', user.id)
     .single()
 
+  if (profile?.role === 'admin') {
+    return res.redirect('/admin')
+  }
+
   if (profile?.role === 'customer') {
     return res.redirect('/customer/dashboard')
   }

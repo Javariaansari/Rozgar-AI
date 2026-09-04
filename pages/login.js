@@ -25,8 +25,15 @@ export default function Login() {
       return
     }
 
-    const role = data?.user?.user_metadata?.role
-    if (role === 'customer') {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', data.user.id)
+      .single()
+
+    if (profile?.role === 'admin') {
+      router.push('/admin')
+    } else if (profile?.role === 'customer') {
       router.push('/customer/dashboard')
     } else {
       router.push('/worker/dashboard')
@@ -42,6 +49,12 @@ export default function Login() {
         {message === 'check-email' && (
           <div className="mb-4 p-3 bg-green-50 text-green-700 rounded text-sm">
             Account created. Please check your email to confirm before signing in.
+          </div>
+        )}
+
+        {message === 'admin-only' && (
+          <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">
+            Admin access required.
           </div>
         )}
 

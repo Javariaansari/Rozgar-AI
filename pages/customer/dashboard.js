@@ -68,6 +68,11 @@ export default function CustomerDashboard({ profile, customerProfile }) {
   const [isDeletingAccount, setIsDeletingAccount] = useState(false)
   const recognitionRef = useRef(null)
 
+  const [disputeJobId, setDisputeJobId] = useState(null)
+  const [disputeReason, setDisputeReason] = useState('')
+  const [disputeLoading, setDisputeLoading] = useState(false)
+  const [disputeError, setDisputeError] = useState('')
+
   const router = useRouter()
   const supabase = createClient()
 
@@ -317,6 +322,45 @@ export default function CustomerDashboard({ profile, customerProfile }) {
     }
 
     router.push('/login')
+  }
+
+  function openDispute(jobId) {
+    setDisputeJobId(jobId)
+    setDisputeReason('')
+    setDisputeError('')
+  }
+
+  function closeDispute() {
+    setDisputeJobId(null)
+    setDisputeReason('')
+    setDisputeError('')
+  }
+
+  async function submitDispute() {
+    const reason = disputeReason.trim()
+    if (reason.length < 10) {
+      setDisputeError('Please describe the issue in at least 10 characters.')
+      return
+    }
+
+    setDisputeLoading(true)
+    setDisputeError('')
+
+    const res = await fetch('/api/disputes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ job_id: disputeJobId, reason }),
+    })
+
+    const data = await res.json()
+    setDisputeLoading(false)
+
+    if (!res.ok) {
+      setDisputeError(data.message || 'Failed to raise dispute')
+      return
+    }
+
+    closeDispute()
   }
 
   const statusBadge = (status) => {
@@ -601,6 +645,12 @@ export default function CustomerDashboard({ profile, customerProfile }) {
                           >
                             Delete
                           </button>
+                          <button
+                            onClick={() => openDispute(job.id)}
+                            className="text-xs px-2 py-1 bg-orange-50 text-orange-700 rounded hover:bg-orange-100 font-medium"
+                          >
+                            Raise Dispute
+                          </button>
                           <span className={`text-xs px-2 py-0.5 rounded font-medium ${statusBadge(job.status)}`}>
                             {job.status}
                           </span>
@@ -656,22 +706,30 @@ export default function CustomerDashboard({ profile, customerProfile }) {
                           </span>
                         </div>
 
-                        {job.status === 'open' && app.status === 'applied' && (
-                          <div className="flex gap-2 mt-3">
-                            <button
-                              onClick={() => updateApplication(app.id, 'selected')}
-                              className="px-3 py-1.5 bg-green-600 text-white rounded text-xs font-medium hover:bg-green-700"
-                            >
-                              Select
-                            </button>
-                            <button
-                              onClick={() => updateApplication(app.id, 'rejected')}
-                              className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-xs font-medium hover:bg-gray-300"
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        )}
+                        <div className="flex flex-wrap gap-2 mt-3">
+                          <button
+                            onClick={() => router.push(`/customer/worker/${app.worker?.id}`)}
+                            className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-medium hover:bg-blue-100"
+                          >
+                            View Resume
+                          </button>
+                          {job.status === 'open' && app.status === 'applied' && (
+                            <>
+                              <button
+                                onClick={() => updateApplication(app.id, 'selected')}
+                                className="px-3 py-1.5 bg-green-600 text-white rounded text-xs font-medium hover:bg-green-700"
+                              >
+                                Select
+                              </button>
+                              <button
+                                onClick={() => updateApplication(app.id, 'rejected')}
+                                className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-xs font-medium hover:bg-gray-300"
+                              >
+                                Reject
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -718,6 +776,46 @@ export default function CustomerDashboard({ profile, customerProfile }) {
             )
           })}
         </div>
+
+        {disputeJobId && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-5">
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Raise Dispute</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Describe the issue with this job. Admin will review and contact you.
+              </p>
+
+              {disputeError && (
+                <div className="mb-3 p-2 bg-red-50 text-red-700 rounded text-sm">{disputeError}</div>
+              )}
+
+              <textarea
+                value={disputeReason}
+                onChange={(e) => setDisputeReason(e.target.value)}
+                placeholder="e.g. The worker did not show up after selection..."
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              />
+
+              <div className="flex gap-2 justify-end">
+                <button
+                  onClick={closeDispute}
+                  disabled={disputeLoading}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded text-sm font-medium hover:bg-gray-200 disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={submitDispute}
+                  disabled={disputeLoading || disputeReason.trim().length < 10}
+                  className="px-4 py-2 bg-orange-600 text-white rounded text-sm font-medium hover:bg-orange-700 disabled:opacity-50"
+                >
+                  {disputeLoading ? 'Submitting...' : 'Submit Dispute'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mt-8 bg-white rounded-lg shadow p-5 border border-red-100">
           <h3 className="text-sm font-bold text-red-700 uppercase tracking-wide mb-2">Danger Zone</h3>

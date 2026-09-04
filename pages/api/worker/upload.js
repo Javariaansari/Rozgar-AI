@@ -44,6 +44,16 @@ export default async function handler(req, res) {
 
   if (type === 'profile_pic') {
     await supabase.from('worker_profiles').update({ profile_pic_url: publicUrl }).eq('user_id', user.id)
+  } else if (type === 'cnic') {
+    await supabase
+      .from('worker_profiles')
+      .update({
+        cnic_url: publicUrl,
+        cnic_verified: false,
+        cnic_verified_at: null,
+        cnic_verified_by: null,
+      })
+      .eq('user_id', user.id)
   }
 
   fs.unlinkSync(file.filepath)

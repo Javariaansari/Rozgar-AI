@@ -20,7 +20,9 @@ export default function Home() {
         .eq('id', user.id)
         .single()
 
-      if (profile?.role === 'customer') {
+      if (profile?.role === 'admin') {
+        router.replace('/admin')
+      } else if (profile?.role === 'customer') {
         router.replace('/customer/dashboard')
       } else {
         router.replace('/worker/dashboard')
