@@ -85,7 +85,6 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
   const [speechSupported, setSpeechSupported] = useState(false)
   const [speechLang, setSpeechLang] = useState('en-IN')
   const recognitionRef = useRef(null)
-  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
 
   const [applications, setApplications] = useState([])
   const [loadingApplications, setLoadingApplications] = useState(false)
@@ -198,24 +197,6 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
     }
 
     router.reload()
-  }
-
-  async function deleteAccount() {
-    if (!window.confirm('Are you sure you want to permanently delete your account? This cannot be undone.')) {
-      return
-    }
-
-    setIsDeletingAccount(true)
-    const res = await fetch('/api/account/delete', { method: 'POST' })
-    const data = await res.json()
-    setIsDeletingAccount(false)
-
-    if (!res.ok) {
-      alert(data.message || 'Failed to delete account')
-      return
-    }
-
-    router.push('/login')
   }
 
   async function loadApplications() {
@@ -666,13 +647,6 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
                   className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-red-50 text-red-700 hover:bg-red-100"
                 >
                   🗑️ Clear Resume
-                </button>
-                <button
-                  onClick={deleteAccount}
-                  disabled={isDeletingAccount}
-                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-red-600 text-white hover:bg-red-700 disabled:opacity-50"
-                >
-                  {isDeletingAccount ? 'Deleting Account...' : '⚠️ Delete Account'}
                 </button>
               </div>
             </div>
