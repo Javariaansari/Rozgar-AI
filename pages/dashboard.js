@@ -13,6 +13,10 @@ export async function getServerSideProps(context) {
     .eq('id', user.id)
     .single()
 
+  if (!profile?.role) {
+    return { redirect: { destination: '/login', permanent: false } }
+  }
+
   const destination =
     profile?.role === 'admin'
       ? '/admin'

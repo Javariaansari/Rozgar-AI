@@ -27,6 +27,10 @@ export default async function handler(req, res) {
     return res.redirect('/admin')
   }
 
+  if (!profile?.role) {
+    return res.redirect('/login?error=profile-incomplete')
+  }
+
   if (profile?.role === 'customer') {
     return res.redirect('/customer/dashboard')
   }
