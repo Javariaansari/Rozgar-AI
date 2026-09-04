@@ -2,13 +2,11 @@
 > rozgar-ai@0.1.0 start
 > next start -p 3005
 
-⨯ Failed to start server
-Error: listen EADDRINUSE: address already in use :::3005
-    at <unknown> (Error: listen EADDRINUSE: address already in use :::3005)
-    at new Promise (<anonymous>) {
-  code: 'EADDRINUSE',
-  errno: -4091,
-  syscall: 'listen',
-  address: '::',
-  port: 3005
-}
+▲ Next.js 16.3.3
+- Local:         http://localhost:3005
+- Network:       http://172.28.16.1:3005
+✓ Ready in 235ms
+⚠ Warning: Next.js ignored package-lock.json in C:\Users\M.R Computers because it is outside the current Git repository (C:\Users\M.R Computers\Documents\Qoder\2026-08-27\22451ed0\rozgar-ai).
+ To use this directory, set `outputFileTracingRoot` in your Next.js config.
+
+✓ Running next.config.mjs took 41ms
