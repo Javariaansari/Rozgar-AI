@@ -36,6 +36,10 @@ export default async function handler(req, res) {
       return res.status(403).json({ message: 'Only customers can post jobs' })
     }
 
+    if (!profile.phone) {
+      return res.status(400).json({ message: 'Please add a phone number to your profile before posting a job' })
+    }
+
     const { title, description, category, budget, location } = req.body
 
     if (!title || typeof title !== 'string' || title.trim().length < 3) {

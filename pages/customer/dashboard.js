@@ -73,6 +73,13 @@ export default function CustomerDashboard({ profile, customerProfile }) {
   const [disputeLoading, setDisputeLoading] = useState(false)
   const [disputeError, setDisputeError] = useState('')
 
+  const [editingProfile, setEditingProfile] = useState(false)
+  const [savingProfile, setSavingProfile] = useState(false)
+  const [profileForm, setProfileForm] = useState({
+    name: profile?.name || '',
+    phone: profile?.phone || '',
+  })
+
   const router = useRouter()
   const supabase = createClient()
 
@@ -87,6 +94,28 @@ export default function CustomerDashboard({ profile, customerProfile }) {
   async function handleLogout() {
     await supabase.auth.signOut()
     router.push('/login')
+  }
+
+  async function saveProfile() {
+    setSavingProfile(true)
+    setError('')
+
+    const res = await fetch('/api/customer/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profileForm),
+    })
+
+    const data = await res.json()
+    setSavingProfile(false)
+
+    if (!res.ok) {
+      setError(data.message || 'Failed to update profile')
+      return
+    }
+
+    setEditingProfile(false)
+    setError('')
   }
 
   function startListening() {
@@ -409,6 +438,62 @@ export default function CustomerDashboard({ profile, customerProfile }) {
 
         {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">{error}</div>}
 
+        {!editingProfile ? (
+          <div className="mb-6 bg-white rounded-lg shadow p-4 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-gray-900">{profile?.name || 'Customer'}</p>
+              <p className="text-sm text-gray-600">
+                {profile?.phone ? `📞 ${profile.phone}` : 'Phone number required to post jobs and contact workers'}
+              </p>
+            </div>
+            <button
+              onClick={() => setEditingProfile(true)}
+              className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-xs font-medium hover:bg-gray-200"
+            >
+              {profile?.phone ? 'Edit Profile' : 'Add Phone'}
+            </button>
+          </div>
+        ) : (
+          <div className="mb-6 bg-white rounded-lg shadow p-4 space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Name</label>
+                <input
+                  value={profileForm.name}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, name: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Phone</label>
+                <input
+                  type="tel"
+                  value={profileForm.phone}
+                  onChange={(e) => setProfileForm((f) => ({ ...f, phone: e.target.value }))}
+                  placeholder="+923001234567"
+                  className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 justify-end">
+              <button
+                onClick={() => setEditingProfile(false)}
+                disabled={savingProfile}
+                className="px-4 py-2 bg-gray-100 text-gray-700 rounded text-sm font-medium hover:bg-gray-200 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveProfile}
+                disabled={savingProfile}
+                className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+              >
+                {savingProfile ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="mb-6 bg-white rounded-lg shadow p-5">
           <div className="flex items-center justify-between">
             <div>
@@ -704,6 +789,11 @@ export default function CustomerDashboard({ profile, customerProfile }) {
                           >
                             {app.status}
                           </span>
+                          {app.status === 'selected' && app.worker?.phone && (
+                            <p className="text-xs text-green-700 font-medium mt-1">
+                              📞 Worker phone: {app.worker.phone}
+                            </p>
+                          )}
                         </div>
 
                         <div className="flex flex-wrap gap-2 mt-3">
@@ -736,6 +826,11 @@ export default function CustomerDashboard({ profile, customerProfile }) {
 
                   {job.status === 'in_progress' && selectedApplicant && (
                     <div className="mt-5 pt-5 border-t border-gray-100">
+                      {selectedApplicant.worker?.phone && (
+                        <p className="text-sm text-green-700 font-medium mb-2">
+                          📞 Worker phone: {selectedApplicant.worker.phone}
+                        </p>
+                      )}
                       <p className="text-sm font-medium text-gray-900 mb-2">
                         Work done? Rate {selectedApplicant.worker?.name || 'the worker'} and complete the job
                       </p>

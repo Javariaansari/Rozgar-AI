@@ -90,6 +90,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
   const [applications, setApplications] = useState([])
   const [loadingApplications, setLoadingApplications] = useState(false)
   const [applicationsError, setApplicationsError] = useState('')
+  const [deletingId, setDeletingId] = useState(null)
 
   const [disputeJobId, setDisputeJobId] = useState(null)
   const [disputeReason, setDisputeReason] = useState('')
@@ -231,6 +232,31 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
     }
 
     setApplications(data.applications || [])
+  }
+
+  async function deleteApplication(applicationId) {
+    if (!window.confirm('Are you sure you want to withdraw this application?')) {
+      return
+    }
+
+    setDeletingId(applicationId)
+    setApplicationsError('')
+
+    const res = await fetch('/api/worker/applications', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ application_id: applicationId }),
+    })
+
+    const data = await res.json()
+    setDeletingId(null)
+
+    if (!res.ok) {
+      setApplicationsError(data.message || 'Failed to withdraw application')
+      return
+    }
+
+    loadApplications()
   }
 
   function openDispute(jobId) {
@@ -433,13 +459,27 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
                   >
                     {app.status}
                   </span>
+                  {app.status === 'selected' && app.job?.customer?.phone && (
+                    <p className="text-xs text-green-700 font-medium mt-1">
+                      Customer phone: {app.job.customer.phone}
+                    </p>
+                  )}
                 </div>
-                <button
-                  onClick={() => openDispute(app.job?.id)}
-                  className="text-xs px-2 py-1 bg-orange-50 text-orange-700 rounded hover:bg-orange-100 font-medium"
-                >
-                  Raise Dispute
-                </button>
+                <div className="flex flex-col gap-1.5">
+                  <button
+                    onClick={() => openDispute(app.job?.id)}
+                    className="text-xs px-2 py-1 bg-orange-50 text-orange-700 rounded hover:bg-orange-100 font-medium"
+                  >
+                    Raise Dispute
+                  </button>
+                  <button
+                    onClick={() => deleteApplication(app.id)}
+                    disabled={deletingId === app.id}
+                    className="text-xs px-2 py-1 bg-red-50 text-red-700 rounded hover:bg-red-100 font-medium disabled:opacity-50"
+                  >
+                    {deletingId === app.id ? 'Deleting...' : 'Delete'}
+                  </button>
+                </div>
               </div>
             ))}
           </div>

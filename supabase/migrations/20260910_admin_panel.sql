@@ -36,9 +36,9 @@ begin
   -- client-controlled metadata can never become admin
   safe_role := case when requested_role in ('worker', 'customer') then requested_role else 'worker' end;
 
-  insert into public.profiles (id, role, email)
-  values (new.id, safe_role, new.email)
-  on conflict (id) do update set email = excluded.email;
+  insert into public.profiles (id, role, email, phone)
+  values (new.id, safe_role, new.email, new.raw_user_meta_data->>'phone')
+  on conflict (id) do update set email = excluded.email, phone = excluded.phone;
 
   if safe_role = 'worker' then
     insert into public.worker_profiles (user_id) values (new.id) on conflict (user_id) do nothing;

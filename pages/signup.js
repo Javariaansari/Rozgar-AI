@@ -6,22 +6,31 @@ import { createClient } from '@/lib/supabaseClient'
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
   const [role, setRole] = useState('worker')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
+  const phoneRegex = /^(\+92|0|92)\d{10}$/
+
   async function handleSignup(e) {
     e.preventDefault()
     setLoading(true)
     setError('')
 
+    if (!phoneRegex.test(phone)) {
+      setError('Please enter a valid phone number (e.g. +923001234567 or 03001234567)')
+      setLoading(false)
+      return
+    }
+
     const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { role },
+        data: { role, phone },
       },
     })
 
@@ -79,6 +88,21 @@ export default function Signup() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+              Phone Number
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="e.g. +923001234567"
+              required
               className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>

@@ -22,6 +22,10 @@ export default async function handler(req, res) {
     return res.status(403).json({ message: 'Worker profile required' })
   }
 
+  if (!profile.phone) {
+    return res.status(400).json({ message: 'Please add a phone number to your profile before applying' })
+  }
+
   const { job_id } = req.body
   if (!job_id) {
     return res.status(400).json({ message: 'Job ID required' })
