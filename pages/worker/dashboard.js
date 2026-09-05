@@ -427,7 +427,10 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
                 <div>
                   <p className="font-medium text-sm text-gray-900">{app.job?.title || 'Job'}</p>
                   <p className="text-xs text-gray-500">
-                    {app.job?.customer?.name || 'Customer'} • {app.job?.location || 'No location'} • PKR {app.job?.budget || 'N/A'}
+                    {app.job?.customer?.name || 'Customer'}
+                    {app.job?.customer?.phone && ` • 📞 ${app.job.customer.phone}`}
+                    {' • '}
+                    {app.job?.location || 'No location'} • PKR {app.job?.budget || 'N/A'}
                   </p>
                   <span
                     className={`inline-block mt-1.5 text-xs px-2 py-0.5 rounded font-medium ${
@@ -440,11 +443,6 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
                   >
                     {app.status}
                   </span>
-                  {app.status === 'selected' && app.job?.customer?.phone && (
-                    <p className="text-xs text-green-700 font-medium mt-1">
-                      Customer phone: {app.job.customer.phone}
-                    </p>
-                  )}
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <button

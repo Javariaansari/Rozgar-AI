@@ -137,7 +137,12 @@ export default function WorkerJobs({ profile, workerProfile }) {
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div>
                   <h3 className="font-medium text-gray-900">{job.title}</h3>
-                  <p className="text-sm text-gray-500">{job.customer?.name || 'Customer'} • {job.location || 'No location'}</p>
+                  <p className="text-sm text-gray-500">
+                    {job.customer?.name || 'Customer'}
+                    {job.customer?.phone && ` • 📞 ${job.customer.phone}`}
+                    {' • '}
+                    {job.location || 'No location'}
+                  </p>
                 </div>
                 <div className="text-right">
                   <div className="text-lg font-bold text-blue-600">{job.match_score}%</div>
