@@ -22,10 +22,36 @@ export async function getServerSideProps(context) {
     return { redirect: { destination, permanent: false } }
   }
 
-  return { props: {} }
+  const [{ count: verifiedWorkers }, { count: completedJobs }, { data: ratings }] =
+    await Promise.all([
+      supabase
+        .from('worker_profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('cnic_verified', true),
+      supabase
+        .from('jobs')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'completed'),
+      supabase.from('ratings').select('stars'),
+    ])
+
+  const averageRating =
+    ratings && ratings.length > 0
+      ? (ratings.reduce((sum, r) => sum + r.stars, 0) / ratings.length).toFixed(1)
+      : '0.0'
+
+  return {
+    props: {
+      stats: {
+        verifiedWorkers: verifiedWorkers || 0,
+        completedJobs: completedJobs || 0,
+        averageRating,
+      },
+    },
+  }
 }
 
-export default function Home() {
+export default function Home({ stats }) {
   return (
     <div className="min-h-screen bg-white">
       <nav className="border-b border-gray-100">
@@ -142,15 +168,19 @@ export default function Home() {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Trusted by Workers & Customers</h2>
           <div className="mt-8 flex flex-wrap justify-center gap-8">
             <div>
-              <p className="text-3xl font-bold text-blue-700">500+</p>
+              <p className="text-3xl font-bold text-blue-700">
+                {stats.verifiedWorkers > 0 ? `${stats.verifiedWorkers}+` : stats.verifiedWorkers}
+              </p>
               <p className="text-sm text-gray-600">Verified Workers</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-blue-700">1,200+</p>
+              <p className="text-3xl font-bold text-blue-700">
+                {stats.completedJobs > 0 ? `${stats.completedJobs.toLocaleString()}+` : stats.completedJobs}
+              </p>
               <p className="text-sm text-gray-600">Completed Jobs</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-blue-700">4.8/5</p>
+              <p className="text-3xl font-bold text-blue-700">{stats.averageRating}/5</p>
               <p className="text-sm text-gray-600">Average Rating</p>
             </div>
           </div>
