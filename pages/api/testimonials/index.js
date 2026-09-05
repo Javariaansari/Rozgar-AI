@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabaseServer'
+import { createServiceClient } from '@/lib/supabaseService'
 
 export default async function handler(req, res) {
   const supabase = createClient(req, res)
@@ -73,7 +74,8 @@ export default async function handler(req, res) {
 
     const safeStars = stars ? parseInt(stars, 10) : null
 
-    const { data: testimonial, error } = await supabase
+    const serviceClient = createServiceClient()
+    const { data: testimonial, error } = await serviceClient
       .from('testimonials')
       .insert({
         user_id: user.id,
