@@ -22,36 +22,58 @@ export async function getServerSideProps(context) {
     return { redirect: { destination, permanent: false } }
   }
 
-  const [{ count: verifiedWorkers }, { count: completedJobs }, { data: ratings }] =
+  const [verifiedWorkersRes, completedJobsRes, ratingsRes, testimonialsRes] =
     await Promise.all([
       supabase
         .from('worker_profiles')
         .select('*', { count: 'exact', head: true })
-        .eq('cnic_verified', true),
+        .eq('cnic_verified', true)
+        .then((r) => r)
+        .catch(() => ({ count: 0 })),
       supabase
         .from('jobs')
         .select('*', { count: 'exact', head: true })
-        .eq('status', 'completed'),
-      supabase.from('ratings').select('stars'),
+        .eq('status', 'completed')
+        .then((r) => r)
+        .catch(() => ({ count: 0 })),
+      supabase
+        .from('ratings')
+        .select('stars')
+        .then((r) => r)
+        .catch(() => ({ data: [] })),
+      supabase
+        .from('testimonials')
+        .select('*')
+        .eq('is_approved', true)
+        .order('created_at', { ascending: false })
+        .limit(4)
+        .then((r) => r)
+        .catch(() => ({ data: [] })),
     ])
 
+  const verifiedWorkers = verifiedWorkersRes.count || 0
+  const completedJobs = completedJobsRes.count || 0
+  const ratings = ratingsRes.data || []
+  const testimonials = testimonialsRes.data || []
+
   const averageRating =
-    ratings && ratings.length > 0
+    ratings.length > 0
       ? (ratings.reduce((sum, r) => sum + r.stars, 0) / ratings.length).toFixed(1)
       : '0.0'
 
   return {
     props: {
       stats: {
-        verifiedWorkers: verifiedWorkers || 0,
-        completedJobs: completedJobs || 0,
+        verifiedWorkers,
+        completedJobs,
         averageRating,
       },
+      testimonials,
     },
   }
 }
 
-export default function Home({ stats }) {
+export default function Home({ stats, testimonials }) {
   return (
     <div className="min-h-screen bg-white">
       <nav className="border-b border-gray-100">
@@ -185,18 +207,41 @@ export default function Home({ stats }) {
             </div>
           </div>
           <div className="mt-10 grid md:grid-cols-2 gap-6 text-left">
-            <div className="bg-white rounded-lg shadow p-5">
-              <p className="text-sm text-gray-700">
-                "Rozgar AI ne mujhe Lahore mein acha electrician jaldi dila diya. AI matching kaam ki cheez hai."
-              </p>
-              <p className="mt-3 text-sm font-medium text-gray-900">— Ahmed, Customer</p>
-            </div>
-            <div className="bg-white rounded-lg shadow p-5">
-              <p className="text-sm text-gray-700">
-                "Meri voice se profile bani aur 3 din mein kaam mil gaya. Bahut asaan process hai."
-              </p>
-              <p className="mt-3 text-sm font-medium text-gray-900">— Rashid, Electrician</p>
-            </div>
+            {(testimonials.length > 0
+              ? testimonials
+              : [
+                  {
+                    id: 'default-1',
+                    content:
+                      'Rozgar AI ne mujhe Lahore mein acha electrician jaldi dila diya. AI matching kaam ki cheez hai.',
+                    name: 'Ahmed',
+                    role: 'customer',
+                  },
+                  {
+                    id: 'default-2',
+                    content:
+                      'Meri voice se profile bani aur 3 din mein kaam mil gaya. Bahut asaan process hai.',
+                    name: 'Rashid',
+                    role: 'worker',
+                  },
+                ]
+            ).map((t) => (
+              <div key={t.id} className="bg-white rounded-lg shadow p-5">
+                <p className="text-sm text-gray-700 whitespace-pre-wrap">"{t.content}"</p>
+                <p className="mt-3 text-sm font-medium text-gray-900">
+                  — {t.name}, {t.role === 'worker' ? 'Worker' : 'Customer'}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8">
+            <Link
+              href="/feedback"
+              className="inline-block text-sm font-medium text-blue-600 hover:underline"
+            >
+              Apna feedback dein →
+            </Link>
           </div>
         </div>
       </section>

@@ -116,6 +116,19 @@ create table admin_actions (
   created_at timestamptz default now()
 );
 
+-- Testimonials / public reviews submitted by customers and workers
+create table testimonials (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references profiles(id) on delete cascade not null,
+  name text not null,
+  role text check (role in ('customer', 'worker')) not null,
+  content text not null,
+  stars int check (stars between 1 and 5),
+  is_approved boolean not null default false,
+  voice_transcript text,
+  created_at timestamptz default now()
+);
+
 -- ============================================================
 -- Indexes
 -- ============================================================
@@ -128,6 +141,8 @@ create index jobs_created_at_idx on public.jobs (created_at desc);
 create index disputes_status_idx on public.disputes (status);
 create index disputes_created_at_idx on public.disputes (created_at desc);
 create index admin_actions_created_at_idx on public.admin_actions (created_at desc);
+create index testimonials_approved_idx on public.testimonials (is_approved, created_at desc);
+create index testimonials_user_id_idx on public.testimonials (user_id);
 
 -- ============================================================
 -- Auto-update worker resume rating stats when a rating changes
@@ -225,6 +240,7 @@ alter table ai_matches enable row level security;
 alter table ratings enable row level security;
 alter table disputes enable row level security;
 alter table admin_actions enable row level security;
+alter table testimonials enable row level security;
 
 -- Profiles: users can read all, insert/update own; admins can update/delete any
 create policy "Public profiles readable" on profiles for select using (true);
@@ -289,6 +305,13 @@ create policy "Admins update disputes" on disputes
 -- Admin audit log
 create policy "Admins read audit log" on admin_actions
   for select using (public.is_admin());
+
+-- Testimonials: public reads approved; users manage own; admins manage all
+create policy "Approved testimonials readable" on testimonials for select using (is_approved = true);
+create policy "Users insert own testimonials" on testimonials for insert with check (auth.uid() = user_id);
+create policy "Users update own testimonials" on testimonials for update using (auth.uid() = user_id);
+create policy "Admins manage testimonials" on testimonials
+  for all using (public.is_admin()) with check (public.is_admin());
 
 -- ============================================================
 -- Storage: worker-documents bucket

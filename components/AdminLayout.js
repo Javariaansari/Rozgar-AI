@@ -7,6 +7,7 @@ const TABS = [
   { href: '/admin/users', label: 'Users' },
   { href: '/admin/jobs', label: 'Jobs' },
   { href: '/admin/disputes', label: 'Disputes' },
+  { href: '/admin/testimonials', label: 'Feedback' },
 ]
 
 export default function AdminLayout({ profile, title, subtitle, actions, children }) {
