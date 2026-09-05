@@ -11,7 +11,10 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
   const [error, setError] = useState('')
   const [speechSupported, setSpeechSupported] = useState(false)
   const [speechLang, setSpeechLang] = useState('en-IN')
+  const [isTranslating, setIsTranslating] = useState(false)
   const recognitionRef = useRef(null)
+  const shouldTranslateOnEnd = useRef(false)
+  const transcriptRef = useRef('')
 
   useEffect(() => {
     setSpeechSupported('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
@@ -19,6 +22,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
 
   function startListening() {
     setError('')
+    shouldTranslateOnEnd.current = true
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     const recognition = new SpeechRecognition()
@@ -36,7 +40,10 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
           temp += event.results[i][0].transcript
         }
       }
-      setTranscript(final.trim())
+      const newFinal = final.trim()
+      const updated = transcriptRef.current ? `${transcriptRef.current} ${newFinal}`.trim() : newFinal
+      setTranscript(updated)
+      transcriptRef.current = updated
       setInterim(temp)
     }
 
@@ -45,7 +52,17 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
       setIsListening(false)
     }
 
-    recognition.onend = () => setIsListening(false)
+    recognition.onend = () => {
+      setIsListening(false)
+      if (shouldTranslateOnEnd.current) {
+        shouldTranslateOnEnd.current = false
+        if (transcriptRef.current.trim()) {
+          translateTranscript(transcriptRef.current)
+        } else {
+          setInterim('')
+        }
+      }
+    }
 
     recognitionRef.current = recognition
     recognition.start()
@@ -57,6 +74,35 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
       recognitionRef.current.stop()
     }
     setIsListening(false)
+  }
+
+  async function translateTranscript(text) {
+    setIsTranslating(true)
+    setError('')
+
+    try {
+      const res = await fetch('/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Translation failed')
+      }
+
+      const translated = data.translated || text
+      setTranscript(translated)
+      transcriptRef.current = translated
+      setInterim('')
+    } catch (err) {
+      console.warn('[FeedbackForm] translation error:', err.message)
+      setError('Translation failed. Aapka original text submit ho jayega.')
+    } finally {
+      setIsTranslating(false)
+    }
   }
 
   async function handleSubmit(e) {
@@ -98,6 +144,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
 
     setSubmitted(true)
     setTranscript('')
+    transcriptRef.current = ''
   }
 
   if (submitted) {
@@ -147,7 +194,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
           <button
             type="button"
             onClick={isListening ? stopListening : startListening}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isTranslating}
             className={`px-4 py-2 rounded text-white text-sm font-medium transition ${
               isListening
                 ? 'bg-red-500 hover:bg-red-600'
@@ -159,7 +206,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
           <select
             value={speechLang}
             onChange={(e) => setSpeechLang(e.target.value)}
-            disabled={isListening}
+            disabled={isListening || isTranslating}
             className="px-3 py-2 border border-gray-300 rounded text-sm bg-white disabled:opacity-50"
           >
             <option value="en-IN">English + Roman Urdu (en-IN)</option>
@@ -167,6 +214,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
             <option value="en-US">English (en-US)</option>
           </select>
           {isListening && <span className="text-xs text-red-600 animate-pulse">Listening...</span>}
+          {isTranslating && <span className="text-xs text-blue-600 animate-pulse">Translating to English...</span>}
         </div>
       )}
 
@@ -179,7 +227,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
               }`}
             />
             <span className="text-xs font-medium text-gray-300">
-              {isListening ? 'Live transcript' : 'Transcript preview'}
+              {isTranslating ? 'Translating to English...' : isListening ? 'Live transcript' : 'Transcript preview'}
             </span>
           </div>
           <p className="text-base leading-relaxed whitespace-pre-wrap" dir="auto">
@@ -196,7 +244,11 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
         <label className="block text-sm font-medium text-gray-700 mb-1">Feedback</label>
         <textarea
           value={transcript}
-          onChange={(e) => setTranscript(e.target.value)}
+          onChange={(e) => {
+            const t = e.target.value
+            setTranscript(t)
+            transcriptRef.current = t
+          }}
           placeholder="Apna experience batayein..."
           className="w-full h-32 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
           required
@@ -205,10 +257,10 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
 
       <button
         type="submit"
-        disabled={isSubmitting || !transcript.trim()}
+        disabled={isSubmitting || isTranslating || !transcript.trim()}
         className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+        {isSubmitting ? 'Submitting...' : isTranslating ? 'Translating...' : 'Submit Feedback'}
       </button>
     </form>
   )
