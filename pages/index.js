@@ -235,14 +235,6 @@ export default function Home({ stats, testimonials }) {
             ))}
           </div>
 
-          <div className="mt-8">
-            <Link
-              href="/feedback"
-              className="inline-block text-sm font-medium text-blue-600 hover:underline"
-            >
-              Apna feedback dein →
-            </Link>
-          </div>
         </div>
       </section>
 
