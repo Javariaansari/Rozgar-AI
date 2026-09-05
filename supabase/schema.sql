@@ -50,6 +50,8 @@ create table jobs (
   category text,
   budget numeric,
   location text,
+  latitude double precision,
+  longitude double precision,
   status text default 'open' check (status in ('open', 'in_progress', 'completed', 'cancelled')),
   is_flagged boolean not null default false,
   flag_reason text,

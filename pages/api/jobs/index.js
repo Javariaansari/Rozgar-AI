@@ -40,7 +40,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Please add a phone number to your profile before posting a job' })
     }
 
-    const { title, description, category, budget, location } = req.body
+    const { title, description, category, budget, location, latitude, longitude } = req.body
 
     if (!title || typeof title !== 'string' || title.trim().length < 3) {
       return res.status(400).json({ message: 'Title is required' })
@@ -49,6 +49,8 @@ export default async function handler(req, res) {
     if (!location || typeof location !== 'string' || location.trim().length < 2) {
       return res.status(400).json({ message: 'Location is required' })
     }
+
+    const coords = parseCoords(latitude, longitude)
 
     const { data: job, error } = await supabase
       .from('jobs')
@@ -59,6 +61,8 @@ export default async function handler(req, res) {
         category: category?.trim() || '',
         budget: budget ? Number(budget) : null,
         location: location?.trim() || '',
+        latitude: coords.lat,
+        longitude: coords.lng,
       })
       .select()
       .single()
@@ -71,4 +75,17 @@ export default async function handler(req, res) {
   }
 
   res.status(405).json({ message: 'Method not allowed' })
+}
+
+function parseCoords(latitude, longitude) {
+  const lat = Number(latitude)
+  const lng = Number(longitude)
+  const valid =
+    Number.isFinite(lat) &&
+    Number.isFinite(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180
+  return valid ? { lat, lng } : { lat: null, lng: null }
 }
