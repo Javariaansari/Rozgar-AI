@@ -49,6 +49,12 @@ export default function PostJob({ profile }) {
     setError('')
     setSuccess('')
 
+    if (!form.location.trim()) {
+      setError('Location is required')
+      setLoading(false)
+      return
+    }
+
     const res = await fetch('/api/jobs', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -140,11 +146,14 @@ export default function PostJob({ profile }) {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Location <span className="text-red-500">*</span>
+                </label>
                 <input
                   value={form.location}
                   onChange={(e) => setForm(f => ({ ...f, location: e.target.value }))}
                   placeholder="e.g. Lahore, Model Town"
+                  required
                   className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 />
               </div>

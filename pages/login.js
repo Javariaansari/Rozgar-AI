@@ -75,6 +75,12 @@ export default function Login() {
           </div>
         )}
 
+        {message === 'password-reset' && (
+          <div className="mb-4 p-3 bg-green-50 text-green-700 rounded text-sm">
+            Password updated successfully. Please sign in with your new password.
+          </div>
+        )}
+
         {message === 'admin-only' && (
           <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">
             Admin access required.
@@ -122,6 +128,12 @@ export default function Login() {
               />
               Show password
             </label>
+          </div>
+
+          <div className="text-right">
+            <Link href="/forgot-password" className="text-sm text-blue-600 hover:underline">
+              Forgot password?
+            </Link>
           </div>
 
           <button

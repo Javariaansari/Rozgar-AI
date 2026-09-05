@@ -586,10 +586,13 @@ export default function CustomerDashboard({ profile, customerProfile }) {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Location</label>
+                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                          Location <span className="text-red-500">*</span>
+                        </label>
                         <input
                           value={extractedJob.location || ''}
                           onChange={(e) => setExtractedJob((j) => ({ ...j, location: e.target.value }))}
+                          required
                           className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
                         />
                       </div>
@@ -597,7 +600,7 @@ export default function CustomerDashboard({ profile, customerProfile }) {
                   </div>
                   <button
                     onClick={postExtractedJob}
-                    disabled={isPosting || !extractedJob.title?.trim()}
+                    disabled={isPosting || !extractedJob.title?.trim() || !extractedJob.location?.trim()}
                     className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
                   >
                     {isPosting ? 'Posting...' : 'Confirm & Post Job'}
@@ -663,10 +666,13 @@ export default function CustomerDashboard({ profile, customerProfile }) {
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">Location</label>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">
+                            Location <span className="text-red-500">*</span>
+                          </label>
                           <input
                             value={editForm.location}
                             onChange={(e) => setEditForm((f) => ({ ...f, location: e.target.value }))}
+                            required
                             className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
                           />
                         </div>
@@ -674,7 +680,7 @@ export default function CustomerDashboard({ profile, customerProfile }) {
                       <div className="flex gap-2 pt-2">
                         <button
                           onClick={() => saveJob(job.id)}
-                          disabled={isSavingEdit || !editForm.title?.trim()}
+                          disabled={isSavingEdit || !editForm.title?.trim() || !editForm.location?.trim()}
                           className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
                         >
                           {isSavingEdit ? 'Saving...' : 'Save'}

@@ -41,6 +41,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Title is required' })
     }
 
+    if (!location || typeof location !== 'string' || location.trim().length < 2) {
+      return res.status(400).json({ message: 'Location is required' })
+    }
+
     const { data: updatedJob, error } = await supabase
       .from('jobs')
       .update({
