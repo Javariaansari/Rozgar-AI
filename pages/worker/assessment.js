@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { createClient } from '@/lib/supabaseClient'
 
@@ -56,8 +56,64 @@ export default function Assessment({ profile, workerProfile }) {
   const [feedback, setFeedback] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [speechSupported, setSpeechSupported] = useState(false)
+  const [speechLang, setSpeechLang] = useState('en-IN')
+  const [recordingIndex, setRecordingIndex] = useState(null)
+  const [interimAnswer, setInterimAnswer] = useState('')
+  const recognitionRef = useRef(null)
   const router = useRouter()
   const supabase = createClient()
+
+  useEffect(() => {
+    setSpeechSupported('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
+  }, [])
+
+  function startRecording(index) {
+    setError('')
+    setInterimAnswer('')
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    const recognition = new SpeechRecognition()
+    recognition.lang = speechLang
+    recognition.continuous = true
+    recognition.interimResults = true
+
+    recognition.onresult = (event) => {
+      let final = answers[index] || ''
+      let temp = ''
+      for (let i = 0; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          final += event.results[i][0].transcript + ' '
+        } else {
+          temp += event.results[i][0].transcript
+        }
+      }
+      updateAnswer(index, final.trim())
+      setInterimAnswer(temp)
+    }
+
+    recognition.onerror = (event) => {
+      setError(`Speech error: ${event.error}. You can type your answer below.`)
+      stopRecording()
+    }
+
+    recognition.onend = () => {
+      setRecordingIndex(null)
+      setInterimAnswer('')
+    }
+
+    recognitionRef.current = recognition
+    recognition.start()
+    setRecordingIndex(index)
+  }
+
+  function stopRecording() {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop()
+    }
+    setRecordingIndex(null)
+    setInterimAnswer('')
+  }
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -174,6 +230,23 @@ export default function Assessment({ profile, workerProfile }) {
             </div>
           )}
 
+          {speechSupported && questions.length > 0 && (
+            <div className="mb-4 flex flex-wrap items-center gap-3 p-3 bg-blue-50 border border-blue-100 rounded">
+              <span className="text-sm text-blue-900 font-medium">Answer by voice:</span>
+              <select
+                value={speechLang}
+                onChange={(e) => setSpeechLang(e.target.value)}
+                disabled={recordingIndex !== null}
+                className="px-3 py-1.5 border border-gray-300 rounded text-sm bg-white disabled:opacity-50"
+              >
+                <option value="en-IN">English + Roman Urdu (en-IN)</option>
+                <option value="ur-PK">Urdu (ur-PK)</option>
+                <option value="en-US">English (en-US)</option>
+              </select>
+              <span className="text-xs text-blue-700">Click the mic button next to each answer to record.</span>
+            </div>
+          )}
+
           {questions.length === 0 ? (
             <div className="space-y-3">
               <button
@@ -210,13 +283,44 @@ export default function Assessment({ profile, workerProfile }) {
                   <span className="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded mb-2">
                     {q.skill}
                   </span>
-                  <textarea
-                    value={answers[i] || ''}
-                    onChange={(e) => updateAnswer(i, e.target.value)}
-                    rows={3}
-                    placeholder="Type your answer here..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  />
+                  <div className="relative">
+                    <textarea
+                      value={answers[i] || ''}
+                      onChange={(e) => updateAnswer(i, e.target.value)}
+                      rows={3}
+                      placeholder="Type your answer here or use the mic..."
+                      className="w-full px-3 py-2 pr-10 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    />
+                    {speechSupported && (
+                      <button
+                        type="button"
+                        onClick={() => (recordingIndex === i ? stopRecording() : startRecording(i))}
+                        disabled={loading || (recordingIndex !== null && recordingIndex !== i)}
+                        className={`absolute right-2 bottom-2 p-1.5 rounded-full transition disabled:opacity-40 ${
+                          recordingIndex === i
+                            ? 'bg-red-100 text-red-600 animate-pulse'
+                            : 'bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600'
+                        }`}
+                        title={recordingIndex === i ? 'Stop recording' : 'Record answer'}
+                      >
+                        {recordingIndex === i ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <rect x="6" y="6" width="8" height="8" rx="1" />
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8a1 1 0 10-2 0A5 5 0 015 8a1 1 0 00-2 0 7.001 7.001 0 006 6.93V17H9a1 1 0 100 2h6a1 1 0 100-2h-2v-2.07z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </button>
+                    )}
+                  </div>
+                  {recordingIndex === i && (
+                    <div className="mt-1 flex items-center gap-2 text-xs text-red-600">
+                      <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                      Recording... {interimAnswer && <span className="text-gray-500">{interimAnswer}</span>}
+                    </div>
+                  )}
                 </div>
               ))}
               <button

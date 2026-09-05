@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabaseClient'
@@ -7,11 +7,17 @@ export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [role, setRole] = useState('worker')
+  const [role, setRole] = useState('customer')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+
+  useEffect(() => {
+    if (router.query.role === 'worker' || router.query.role === 'customer') {
+      setRole(router.query.role)
+    }
+  }, [router.query.role])
 
   async function handleSignup(e) {
     e.preventDefault()
@@ -127,7 +133,7 @@ export default function Signup() {
               <label className={`flex-1 flex items-center justify-center p-3 border rounded cursor-pointer transition ${
                 role === 'worker'
                   ? 'border-blue-600 bg-blue-50 text-blue-700'
-                  : 'border-gray-300 hover:border-gray-400'
+                  : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
               }`}>
                 <input
                   type="radio"
@@ -142,7 +148,7 @@ export default function Signup() {
               <label className={`flex-1 flex items-center justify-center p-3 border rounded cursor-pointer transition ${
                 role === 'customer'
                   ? 'border-blue-600 bg-blue-50 text-blue-700'
-                  : 'border-gray-300 hover:border-gray-400'
+                  : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
               }`}>
                 <input
                   type="radio"
