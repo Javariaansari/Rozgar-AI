@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { createClient } from '@/lib/supabaseClient'
 import LocationPicker from '@/components/LocationPicker'
+import FeedbackForm from '@/components/FeedbackForm'
 
 export async function getServerSideProps(context) {
   const { createClient: createServerClient } = await import('@/lib/supabaseServer')
@@ -38,15 +39,22 @@ export async function getServerSideProps(context) {
     customerProfile = newCustomerProfile
   }
 
+  const { count: completedJobs } = await supabase
+    .from('jobs')
+    .select('*', { count: 'exact', head: true })
+    .eq('customer_id', user.id)
+    .eq('status', 'completed')
+
   return {
     props: {
       profile: profile || null,
       customerProfile: customerProfile || null,
+      canGiveFeedback: (completedJobs || 0) > 0,
     },
   }
 }
 
-export default function CustomerDashboard({ profile, customerProfile }) {
+export default function CustomerDashboard({ profile, customerProfile, canGiveFeedback }) {
   const [jobs, setJobs] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -848,6 +856,16 @@ export default function CustomerDashboard({ profile, customerProfile }) {
             )
           })}
         </div>
+
+        {canGiveFeedback && (
+          <div className="mt-8 bg-white rounded-lg shadow p-5">
+            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Share Your Feedback</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Apna experience share karein — voice ya text ke zariye. Admin review ke baad yeh homepage par show hoga.
+            </p>
+            <FeedbackForm name={profile?.name || ''} role="customer" />
+          </div>
+        )}
 
         {disputeJobId && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">

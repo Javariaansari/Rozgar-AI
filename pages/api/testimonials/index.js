@@ -25,14 +25,10 @@ export default async function handler(req, res) {
       return res.status(401).json({ message: 'Not authenticated' })
     }
 
-    const { name, role, content, stars, voice_transcript } = req.body || {}
+    const { name, content, stars, voice_transcript } = req.body || {}
 
     if (!name || !name.trim()) {
       return res.status(400).json({ message: 'Name is required' })
-    }
-
-    if (!['customer', 'worker'].includes(role)) {
-      return res.status(400).json({ message: 'Role must be customer or worker' })
     }
 
     if (!content || !content.trim()) {
@@ -44,6 +40,36 @@ export default async function handler(req, res) {
       .select('role')
       .eq('id', user.id)
       .single()
+
+    if (!profile || !['customer', 'worker'].includes(profile.role)) {
+      return res.status(403).json({ message: 'Only customers or workers can submit feedback' })
+    }
+
+    const role = profile.role
+
+    if (role === 'worker') {
+      const { data: workerProfile } = await supabase
+        .from('worker_profiles')
+        .select('cnic_verified')
+        .eq('user_id', user.id)
+        .single()
+
+      if (!workerProfile?.cnic_verified) {
+        return res.status(403).json({ message: 'CNIC verified workers can submit feedback' })
+      }
+    }
+
+    if (role === 'customer') {
+      const { count: completedJobs } = await supabase
+        .from('jobs')
+        .select('*', { count: 'exact', head: true })
+        .eq('customer_id', user.id)
+        .eq('status', 'completed')
+
+      if (!completedJobs || completedJobs < 1) {
+        return res.status(403).json({ message: 'Customers with a completed job can submit feedback' })
+      }
+    }
 
     const safeStars = stars ? parseInt(stars, 10) : null
 

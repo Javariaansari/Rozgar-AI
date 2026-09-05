@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { createClient } from '@/lib/supabaseClient'
+import FeedbackForm from '@/components/FeedbackForm'
 
 export async function getServerSideProps(context) {
   const { createClient: createServerClient } = await import('@/lib/supabaseServer')
@@ -68,11 +69,12 @@ export async function getServerSideProps(context) {
       profile: profile || null,
       workerProfile: workerProfile || null,
       reviews: enrichedReviews,
+      canGiveFeedback: workerProfile?.cnic_verified === true,
     },
   }
 }
 
-export default function WorkerDashboard({ profile, workerProfile, reviews = [] }) {
+export default function WorkerDashboard({ profile, workerProfile, reviews = [], canGiveFeedback }) {
   const router = useRouter()
   const supabase = createClient()
 
@@ -648,6 +650,16 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [] }
                 </button>
               </div>
             </div>
+
+            {canGiveFeedback && (
+              <div className="bg-white rounded-lg shadow p-5">
+                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Share Your Feedback</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Apna experience share karein — voice ya text ke zariye. Admin review ke baad yeh homepage par show hoga.
+                </p>
+                <FeedbackForm name={profile?.name || ''} role="worker" />
+              </div>
+            )}
           </div>
         </div>
 
