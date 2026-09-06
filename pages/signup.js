@@ -72,16 +72,16 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-page-bg">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow relative">
+    <div className="min-h-screen flex items-center justify-center bg-page-bg mesh-gradient px-4">
+      <div className="w-full max-w-md p-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 relative animate-fade-in-up">
         <button
           type="button"
           onClick={() => (window.history.length > 1 ? router.back() : router.push('/home'))}
-          className="absolute top-4 left-4 px-3 py-1.5 text-sm bg-navy-100 text-body rounded hover:bg-navy-200 flex items-center gap-1"
+          className="absolute top-4 left-4 px-3 py-1.5 text-sm bg-navy-100 text-body rounded hover:bg-navy-200 flex items-center gap-1 transition-all hover:-translate-y-0.5"
         >
           ← Back
         </button>
-        <h1 className="text-2xl font-bold text-center mb-6">Rozgar AI</h1>
+        <h1 className="text-3xl font-extrabold text-center mb-2 text-gradient">Rozgar AI</h1>
         <h2 className="text-lg text-center text-muted mb-8">Create Account</h2>
 
         {error && (
@@ -130,7 +130,7 @@ export default function Signup() {
           <div>
             <label className="block text-sm font-medium text-body mb-2">I am a</label>
             <div className="flex gap-4">
-              <label className={`flex-1 flex items-center justify-center p-3 border rounded cursor-pointer transition ${
+              <label className={`flex-1 flex items-center justify-center p-3 border rounded-xl cursor-pointer transition hover-lift ${
                 role === 'worker'
                   ? 'border-primary bg-navy-50 text-primary'
                   : 'border-line-strong hover:border-accent hover:bg-navy-50'
@@ -145,7 +145,7 @@ export default function Signup() {
                 />
                 <span className="font-medium">Worker</span>
               </label>
-              <label className={`flex-1 flex items-center justify-center p-3 border rounded cursor-pointer transition ${
+              <label className={`flex-1 flex items-center justify-center p-3 border rounded-xl cursor-pointer transition hover-lift ${
                 role === 'customer'
                   ? 'border-primary bg-navy-50 text-primary'
                   : 'border-line-strong hover:border-accent hover:bg-navy-50'
@@ -166,7 +166,7 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 btn-gradient rounded text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </button>
@@ -177,7 +177,7 @@ export default function Signup() {
             <div className="w-full border-t border-line" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-muted">Or continue with</span>
+            <span className="px-2 bg-white/90 text-muted">Or continue with</span>
           </div>
         </div>
 
@@ -185,7 +185,7 @@ export default function Signup() {
           type="button"
           onClick={handleGoogleSignup}
           disabled={loading}
-          className="mt-4 w-full py-2 px-4 border border-line-strong bg-white text-body rounded hover:bg-navy-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="mt-4 w-full py-2 px-4 border border-line-strong bg-white text-body rounded hover:bg-navy-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 hover-lift"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -218,7 +218,7 @@ export default function Signup() {
         <div className="mt-4">
           <Link
             href="/home"
-            className="block w-full py-2 px-4 text-center bg-navy-900 text-white rounded hover:bg-navy-950"
+            className="block w-full py-2 px-4 text-center bg-navy-900 text-white rounded hover:bg-navy-950 transition-all hover:-translate-y-0.5"
           >
             Go to Home
           </Link>

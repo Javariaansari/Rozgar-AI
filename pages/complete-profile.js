@@ -115,16 +115,16 @@ export default function CompleteProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-page-bg">
-        <p className="text-muted">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center bg-page-bg mesh-gradient px-4">
+        <p className="text-muted animate-pulse">Loading...</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-page-bg">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow">
-        <h1 className="text-2xl font-bold text-center mb-2">Rozgar AI</h1>
+    <div className="min-h-screen flex items-center justify-center bg-page-bg mesh-gradient px-4">
+      <div className="w-full max-w-md p-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 relative animate-fade-in-up">
+        <h1 className="text-3xl font-extrabold text-center mb-2 text-gradient">Rozgar AI</h1>
         <h2 className="text-lg text-center text-muted mb-6">Complete Your Profile</h2>
 
         {error && (
@@ -151,7 +151,7 @@ export default function CompleteProfile() {
             <label className="block text-sm font-medium text-body mb-2">I am a</label>
             <div className="flex gap-4">
               <label
-                className={`flex-1 flex items-center justify-center p-3 border rounded cursor-pointer transition ${
+                className={`flex-1 flex items-center justify-center p-3 border rounded-xl cursor-pointer transition hover-lift ${
                   role === 'worker'
                     ? 'border-primary bg-navy-50 text-primary'
                     : 'border-line-strong hover:border-accent'
@@ -168,7 +168,7 @@ export default function CompleteProfile() {
                 <span className="font-medium">Worker</span>
               </label>
               <label
-                className={`flex-1 flex items-center justify-center p-3 border rounded cursor-pointer transition ${
+                className={`flex-1 flex items-center justify-center p-3 border rounded-xl cursor-pointer transition hover-lift ${
                   role === 'customer'
                     ? 'border-primary bg-navy-50 text-primary'
                     : 'border-line-strong hover:border-accent'
@@ -190,7 +190,7 @@ export default function CompleteProfile() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 btn-gradient rounded text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? 'Saving...' : 'Continue'}
           </button>

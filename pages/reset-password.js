@@ -57,16 +57,16 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-page-bg">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow relative">
+    <div className="min-h-screen flex items-center justify-center bg-page-bg mesh-gradient px-4">
+      <div className="w-full max-w-md p-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 relative animate-fade-in-up">
         <button
           type="button"
           onClick={() => router.push('/login')}
-          className="absolute top-4 left-4 px-3 py-1.5 text-sm bg-navy-100 text-body rounded hover:bg-navy-200 flex items-center gap-1"
+          className="absolute top-4 left-4 px-3 py-1.5 text-sm bg-navy-100 text-body rounded hover:bg-navy-200 flex items-center gap-1 transition-all hover:-translate-y-0.5"
         >
           ← Back
         </button>
-        <h1 className="text-2xl font-bold text-center mb-6">Rozgar AI</h1>
+        <h1 className="text-3xl font-extrabold text-center mb-2 text-gradient">Rozgar AI</h1>
         <h2 className="text-lg text-center text-muted mb-8">Create New Password</h2>
 
         {success && (
@@ -125,7 +125,7 @@ export default function ResetPassword() {
           <button
             type="submit"
             disabled={loading || !recoveryReady}
-            className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 btn-gradient rounded text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Updating...' : 'Update Password'}
           </button>
