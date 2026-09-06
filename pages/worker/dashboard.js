@@ -292,7 +292,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 animate-fade-in">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-lg font-semibold">Worker Dashboard</h2>
@@ -301,13 +301,13 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
           <div className="flex items-center gap-2">
             <button
               onClick={() => router.push('/worker/profile')}
-              className="px-4 py-2 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200"
+              className="px-4 py-2 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 transition-all hover:-translate-y-0.5"
             >
               Edit Resume
             </button>
             <button
               onClick={() => router.push('/worker/jobs')}
-              className="px-4 py-2 bg-green-600 text-white rounded text-sm font-medium hover:bg-green-700"
+              className="px-4 py-2 bg-green-600 text-white rounded text-sm font-medium hover:bg-green-700 transition-all hover:-translate-y-0.5"
             >
               Find Jobs
             </button>
@@ -327,7 +327,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
           </div>
         )}
 
-        <div className="mb-6 bg-white rounded-lg shadow p-5">
+        <div className="mb-6 bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-bold text-heading uppercase tracking-wide">Voice Resume</h3>
@@ -337,7 +337,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
             </div>
             <button
               onClick={() => setShowVoice((s) => !s)}
-              className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark"
+              className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark transition-all hover:-translate-y-0.5"
             >
               {showVoice ? 'Close' : '🎙️ Record Voice Resume'}
             </button>
@@ -402,7 +402,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
           )}
         </div>
 
-        <div className="mb-6 bg-white rounded-lg shadow p-5">
+        <div className="mb-6 bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-bold text-heading uppercase tracking-wide">My Applications</h3>
@@ -467,7 +467,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 bg-white rounded-lg shadow overflow-hidden">
+          <div className="md:col-span-2 bg-white rounded-lg shadow overflow-hidden hover-lift animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <div className="bg-gradient-to-r from-primary via-navy-800 to-accent px-6 py-8 text-white">
               <div className="flex items-start gap-5">
                 <div className="w-24 h-24 rounded-full bg-white/20 overflow-hidden flex items-center justify-center border-2 border-white/40 flex-shrink-0">
@@ -588,7 +588,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow p-5">
+            <div className="bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up" style={{ animationDelay: '0.45s' }}>
               <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-4">AI Skill Score</h3>
               {workerProfile?.ai_skill_score && Object.keys(workerProfile.ai_skill_score).length > 0 ? (
                 <div className="space-y-3">
@@ -621,7 +621,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
               )}
             </div>
 
-            <div className="bg-white rounded-lg shadow p-5">
+            <div className="bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
               <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-3">Quick Actions</h3>
               <div className="space-y-2">
                 <button
@@ -652,7 +652,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
             </div>
 
             {canGiveFeedback && (
-              <div className="bg-white rounded-lg shadow p-5">
+              <div className="bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up" style={{ animationDelay: '0.75s' }}>
                 <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-2">Share Your Feedback</h3>
                 <p className="text-sm text-muted mb-4">
                   Apna experience share karein — voice ya text ke zariye. Admin review ke baad yeh homepage par show hoga.

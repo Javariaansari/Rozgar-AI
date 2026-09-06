@@ -18,7 +18,7 @@ export const CHART_COLORS = {
 
 export function ChartCard({ title, footer, children }) {
   return (
-    <section className="bg-white rounded-lg shadow p-5">
+    <section className="bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up">
       <h2 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">
         {title}
       </h2>
@@ -46,8 +46,8 @@ export function BarList({ items }) {
             </div>
             <div className="h-2 bg-navy-100 rounded-full overflow-hidden">
               <div
-                className="h-full rounded-full"
-                style={{ width: `${pct}%`, backgroundColor: item.color }}
+                className="h-full rounded-full animate-bar-grow"
+                style={{ width: `${pct}%`, backgroundColor: item.color, animationDelay: `${i * 0.1}s` }}
               />
             </div>
           </div>
@@ -88,6 +88,8 @@ export function DonutChart({ segments, total, centerLabel, centerValue }) {
                   strokeWidth="4"
                   strokeDasharray={dash}
                   strokeDashoffset={currentOffset}
+                  className="animate-draw"
+                  style={{ animationDelay: `${i * 0.15}s` }}
                 >
                   <title>{`${s.label}: ${s.value}`}</title>
                 </circle>
@@ -141,6 +143,7 @@ export function ProgressRing({ value, total, label }) {
               stroke="#052659"
               strokeWidth="4"
               strokeDasharray={`${pct} ${100 - pct}`}
+              className="animate-draw"
             />
           </g>
         </svg>

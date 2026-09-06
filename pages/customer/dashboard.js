@@ -412,7 +412,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 animate-fade-in">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-lg font-semibold">Customer Dashboard</h2>
@@ -421,7 +421,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
           <button
             onClick={loadJobs}
             disabled={loading}
-            className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark disabled:opacity-50"
+            className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark transition-all hover:-translate-y-0.5 disabled:transform-none disabled:opacity-50"
           >
             {loading ? 'Loading...' : 'Load My Jobs'}
           </button>
@@ -430,7 +430,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">{error}</div>}
 
         {!editingProfile ? (
-          <div className="mb-6 bg-white rounded-lg shadow p-4 flex items-center justify-between">
+          <div className="mb-6 bg-white rounded-lg shadow p-4 flex items-center justify-between hover-lift animate-fade-in-up">
             <div>
               <p className="text-sm font-medium text-heading">{profile?.name || 'Customer'}</p>
               <p className="text-sm text-muted">
@@ -445,7 +445,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
             </button>
           </div>
         ) : (
-          <div className="mb-6 bg-white rounded-lg shadow p-4 space-y-3">
+          <div className="mb-6 bg-white rounded-lg shadow p-4 space-y-3 hover-lift animate-fade-in-up">
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-medium text-body mb-1">Name</label>
@@ -485,7 +485,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
           </div>
         )}
 
-        <div className="mb-6 bg-white rounded-lg shadow p-5">
+        <div className="mb-6 bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-sm font-bold text-heading uppercase tracking-wide">Post Job by Voice</h3>
@@ -617,7 +617,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         </div>
 
         {jobs.length === 0 && !loading && (
-          <div className="bg-white rounded-lg shadow p-6 text-center text-muted text-sm">
+          <div className="bg-white rounded-lg shadow p-6 text-center text-muted text-sm hover-lift animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             No jobs posted yet.{' '}
             <button onClick={() => router.push('/customer/post-job')} className="text-primary hover:underline">
               Post your first job
@@ -626,12 +626,16 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         )}
 
         <div className="space-y-6">
-          {jobs.map((job) => {
+          {jobs.map((job, idx) => {
             const selectedApplicant = job.applications?.find((a) => a.status === 'selected')
             const isCompleted = job.status === 'completed'
 
             return (
-              <div key={job.id} className="bg-white rounded-lg shadow overflow-hidden">
+              <div
+                key={job.id}
+                className="bg-white rounded-lg shadow overflow-hidden hover-lift animate-fade-in-up"
+                style={{ animationDelay: `${0.3 + idx * 0.1}s` }}
+              >
                 <div className="p-5 border-b border-line">
                   {editingJobId === job.id ? (
                     <div className="space-y-3">
@@ -858,7 +862,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         </div>
 
         {canGiveFeedback && (
-          <div className="mt-8 bg-white rounded-lg shadow p-5">
+          <div className="mt-8 bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up">
             <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-2">Share Your Feedback</h3>
             <p className="text-sm text-muted mb-4">
               Apna experience share karein — voice ya text ke zariye. Admin review ke baad yeh homepage par show hoga.

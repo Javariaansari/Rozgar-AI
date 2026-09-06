@@ -9,9 +9,12 @@ import {
   CHART_COLORS,
 } from '@/components/AdminCharts'
 
-function StatCard({ label, value }) {
+function StatCard({ label, value, delay = 0 }) {
   return (
-    <div className="bg-white rounded-lg shadow p-5">
+    <div
+      className="bg-white rounded-lg shadow p-5 hover-lift animate-fade-in-up"
+      style={{ animationDelay: `${delay}s` }}
+    >
       <div className="text-xs uppercase tracking-wide text-muted">{label}</div>
       <div className="text-2xl font-bold text-heading mt-1">{value}</div>
     </div>
@@ -105,26 +108,26 @@ export default function AdminDashboard({ profile }) {
       {!stats && loading ? (
         <p className="text-muted">Loading...</p>
       ) : stats ? (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard label="Total Users" value={stats.users.total} />
-            <StatCard label="Workers" value={stats.users.worker} />
-            <StatCard label="Customers" value={stats.users.customer} />
-            <StatCard label="Banned" value={stats.users.banned} />
+            <StatCard label="Total Users" value={stats.users.total} delay={0} />
+            <StatCard label="Workers" value={stats.users.worker} delay={0.05} />
+            <StatCard label="Customers" value={stats.users.customer} delay={0.1} />
+            <StatCard label="Banned" value={stats.users.banned} delay={0.15} />
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard label="Open Jobs" value={stats.jobs.open} />
-            <StatCard label="In Progress" value={stats.jobs.in_progress} />
-            <StatCard label="Completed" value={stats.jobs.completed} />
-            <StatCard label="Flagged Jobs" value={stats.jobs.flagged} />
+            <StatCard label="Open Jobs" value={stats.jobs.open} delay={0.2} />
+            <StatCard label="In Progress" value={stats.jobs.in_progress} delay={0.25} />
+            <StatCard label="Completed" value={stats.jobs.completed} delay={0.3} />
+            <StatCard label="Flagged Jobs" value={stats.jobs.flagged} delay={0.35} />
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard label="Open Disputes" value={stats.disputes.open} />
-            <StatCard label="Under Review" value={stats.disputes.under_review} />
-            <StatCard label="CNIC Pending" value={stats.workers.cnic_pending} />
-            <StatCard label="CNIC Verified" value={stats.workers.cnic_verified} />
+            <StatCard label="Open Disputes" value={stats.disputes.open} delay={0.4} />
+            <StatCard label="Under Review" value={stats.disputes.under_review} delay={0.45} />
+            <StatCard label="CNIC Pending" value={stats.workers.cnic_pending} delay={0.5} />
+            <StatCard label="CNIC Verified" value={stats.workers.cnic_verified} delay={0.55} />
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
