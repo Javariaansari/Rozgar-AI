@@ -161,26 +161,26 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
       {error && <div className="p-3 bg-red-50 text-red-700 rounded text-sm">{error}</div>}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+        <label className="block text-sm font-medium text-body mb-1">Name</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Aapka naam"
-          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm"
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+        <label className="block text-sm font-medium text-body mb-1">Rating</label>
         <div className="flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((s) => (
             <button
               key={s}
               type="button"
               onClick={() => setStars(s)}
-              className={`text-2xl leading-none ${s <= stars ? 'text-yellow-400' : 'text-gray-300'}`}
+              className={`text-2xl leading-none ${s <= stars ? 'text-yellow-400' : 'text-navy-200'}`}
               aria-label={`Rate ${s} stars`}
             >
               ★
@@ -198,7 +198,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
             className={`px-4 py-2 rounded text-white text-sm font-medium transition ${
               isListening
                 ? 'bg-red-500 hover:bg-red-600'
-                : 'bg-blue-600 hover:bg-blue-700'
+                : 'bg-primary hover:bg-primary-dark'
             } disabled:opacity-50`}
           >
             {isListening ? 'Stop Recording' : '🎙️ Use Microphone'}
@@ -207,41 +207,41 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
             value={speechLang}
             onChange={(e) => setSpeechLang(e.target.value)}
             disabled={isListening || isTranslating}
-            className="px-3 py-2 border border-gray-300 rounded text-sm bg-white disabled:opacity-50"
+            className="px-3 py-2 border border-line-strong rounded text-sm bg-white disabled:opacity-50"
           >
             <option value="en-IN">English + Roman Urdu (en-IN)</option>
             <option value="ur-PK">Urdu (ur-PK)</option>
             <option value="en-US">English (en-US)</option>
           </select>
           {isListening && <span className="text-xs text-red-600 animate-pulse">Listening...</span>}
-          {isTranslating && <span className="text-xs text-blue-600 animate-pulse">Translating to English...</span>}
+          {isTranslating && <span className="text-xs text-primary animate-pulse">Translating to English...</span>}
         </div>
       )}
 
       {(isListening || transcript || interim) && (
-        <div className="p-4 bg-gray-900 text-white rounded-lg min-h-[80px]">
+        <div className="p-4 bg-primary-dark text-white rounded-lg min-h-[80px]">
           <div className="flex items-center gap-2 mb-2">
             <span
               className={`inline-block w-2 h-2 rounded-full ${
                 isListening ? 'bg-red-500 animate-pulse' : 'bg-green-500'
               }`}
             />
-            <span className="text-xs font-medium text-gray-300">
+            <span className="text-xs font-medium text-navy-200">
               {isTranslating ? 'Translating to English...' : isListening ? 'Live transcript' : 'Transcript preview'}
             </span>
           </div>
           <p className="text-base leading-relaxed whitespace-pre-wrap" dir="auto">
             {transcript}
-            {interim && <span className="text-gray-400"> {interim}</span>}
+            {interim && <span className="text-subtle"> {interim}</span>}
             {!transcript && !interim && (
-              <span className="text-gray-500 italic">Start speaking...</span>
+              <span className="text-muted italic">Start speaking...</span>
             )}
           </p>
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Feedback</label>
+        <label className="block text-sm font-medium text-body mb-1">Feedback</label>
         <textarea
           value={transcript}
           onChange={(e) => {
@@ -250,7 +250,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
             transcriptRef.current = t
           }}
           placeholder="Apna experience batayein..."
-          className="w-full h-32 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          className="w-full h-32 px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm"
           required
         />
       </div>
@@ -258,7 +258,7 @@ export default function FeedbackForm({ name: initialName = '', role = 'customer'
       <button
         type="submit"
         disabled={isSubmitting || isTranslating || !transcript.trim()}
-        className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? 'Submitting...' : isTranslating ? 'Translating...' : 'Submit Feedback'}
       </button>

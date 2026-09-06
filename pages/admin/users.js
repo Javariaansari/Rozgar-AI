@@ -4,11 +4,11 @@ import AdminLayout from '@/components/AdminLayout'
 
 const ROLE_BADGES = {
   worker: 'bg-purple-100 text-purple-800',
-  customer: 'bg-blue-100 text-blue-800',
-  admin: 'bg-gray-100 text-gray-800',
+  customer: 'bg-navy-100 text-navy-900',
+  admin: 'bg-navy-100 text-heading',
 }
 
-function Badge({ children, color = 'bg-gray-100 text-gray-800' }) {
+function Badge({ children, color = 'bg-navy-100 text-heading' }) {
   return <span className={`text-xs px-2 py-0.5 rounded font-medium ${color}`}>{children}</span>
 }
 
@@ -130,12 +130,12 @@ export default function AdminUsers({ profile }) {
             placeholder="Search name, email, phone"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
           >
             <option value="">All roles</option>
             <option value="worker">Worker</option>
@@ -145,13 +145,13 @@ export default function AdminUsers({ profile }) {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
           >
             <option value="">All statuses</option>
             <option value="active">Active</option>
             <option value="banned">Banned</option>
           </select>
-          <div className="text-sm text-gray-600 flex items-center">
+          <div className="text-sm text-muted flex items-center">
             {total} user{total !== 1 && 's'} found
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function AdminUsers({ profile }) {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+            <thead className="bg-page-bg text-xs uppercase tracking-wide text-muted">
               <tr>
                 <th className="px-4 py-3 text-left font-medium">User</th>
                 <th className="px-4 py-3 text-left font-medium">Role</th>
@@ -170,22 +170,22 @@ export default function AdminUsers({ profile }) {
                 <th className="px-4 py-3 text-left font-medium">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-line">
               {loading && users.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-6 text-center text-gray-500">Loading...</td>
+                  <td colSpan={6} className="px-4 py-6 text-center text-muted">Loading...</td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-6 text-center text-gray-500">No users found.</td>
+                  <td colSpan={6} className="px-4 py-6 text-center text-muted">No users found.</td>
                 </tr>
               ) : (
                 users.map((u) => (
-                  <tr key={u.id} className="hover:bg-gray-50">
+                  <tr key={u.id} className="hover:bg-navy-50">
                     <td className="px-4 py-3">
-                      <div className="font-medium text-gray-900">{u.name || '(No name)'}</div>
-                      <div className="text-xs text-gray-500">{u.email}</div>
-                      {u.phone && <div className="text-xs text-gray-500">{u.phone}</div>}
+                      <div className="font-medium text-heading">{u.name || '(No name)'}</div>
+                      <div className="text-xs text-muted">{u.email}</div>
+                      {u.phone && <div className="text-xs text-muted">{u.phone}</div>}
                     </td>
                     <td className="px-4 py-3">
                       <Badge color={ROLE_BADGES[u.role]}>{u.role}</Badge>
@@ -208,24 +208,24 @@ export default function AdminUsers({ profile }) {
                               href={u.worker_profile.cnic_url}
                               target="_blank"
                               rel="noreferrer"
-                              className="block text-xs text-blue-600 hover:underline"
+                              className="block text-xs text-primary hover:underline"
                             >
                               View document
                             </a>
                           )}
                         </div>
                       ) : (
-                        <span className="text-gray-400">—</span>
+                        <span className="text-subtle">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-gray-600">{new Date(u.created_at).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 text-muted">{new Date(u.created_at).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2 flex-wrap">
                         {u.role === 'worker' && u.worker_profile && (
                           <button
                             onClick={() => toggleCnic(u)}
                             disabled={actionBusy === `cnic-${u.id}`}
-                            className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs font-medium hover:bg-blue-100 disabled:opacity-50"
+                            className="px-2 py-1 bg-navy-50 text-primary rounded text-xs font-medium hover:bg-navy-100 disabled:opacity-50"
                           >
                             {u.worker_profile.cnic_verified ? 'Unverify CNIC' : 'Verify CNIC'}
                           </button>
@@ -261,21 +261,21 @@ export default function AdminUsers({ profile }) {
           </table>
         </div>
 
-        <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
+        <div className="px-4 py-3 border-t border-line flex items-center justify-between">
           <button
             onClick={() => fetchUsers(page - 1)}
             disabled={page <= 1 || loading}
-            className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+            className="px-3 py-1.5 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
           >
             Previous
           </button>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-muted">
             Page {page} of {totalPages} ({total} total)
           </span>
           <button
             onClick={() => fetchUsers(page + 1)}
             disabled={page >= totalPages || loading}
-            className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+            className="px-3 py-1.5 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
           >
             Next
           </button>

@@ -1,17 +1,17 @@
 export const CHART_COLORS = {
-  open: '#3b82f6',
+  open: '#5483b3',
   in_progress: '#eab308',
   completed: '#22c55e',
   cancelled: '#9ca3af',
   rejected: '#9ca3af',
   under_review: '#eab308',
   resolved: '#22c55e',
-  worker: '#a855f7',
-  customer: '#3b82f6',
-  admin: '#6b7280',
+  worker: '#052659',
+  customer: '#5483b3',
+  admin: '#7da0ca',
   verified: '#22c55e',
   pending: '#f59e0b',
-  other: '#d1d5db',
+  other: '#c1e8ff',
   flagged: '#ef4444',
   banned: '#ef4444',
 }
@@ -19,11 +19,11 @@ export const CHART_COLORS = {
 export function ChartCard({ title, footer, children }) {
   return (
     <section className="bg-white rounded-lg shadow p-5">
-      <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">
+      <h2 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">
         {title}
       </h2>
       {children}
-      {footer && <div className="mt-3 pt-2 border-t border-gray-100 text-xs text-gray-500">{footer}</div>}
+      {footer && <div className="mt-3 pt-2 border-t border-line text-xs text-muted">{footer}</div>}
     </section>
   )
 }
@@ -31,7 +31,7 @@ export function ChartCard({ title, footer, children }) {
 export function BarList({ items }) {
   const max = Math.max(...items.map((i) => i.value), 0)
   if (max === 0) {
-    return <p className="text-sm text-gray-500">No data yet.</p>
+    return <p className="text-sm text-muted">No data yet.</p>
   }
 
   return (
@@ -41,10 +41,10 @@ export function BarList({ items }) {
         return (
           <div key={i}>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs text-gray-500 capitalize">{item.label}</span>
-              <span className="text-sm font-medium text-gray-900">{item.value}</span>
+              <span className="text-xs text-muted capitalize">{item.label}</span>
+              <span className="text-sm font-medium text-heading">{item.value}</span>
             </div>
-            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-2 bg-navy-100 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{ width: `${pct}%`, backgroundColor: item.color }}
@@ -70,7 +70,7 @@ export function DonutChart({ segments, total, centerLabel, centerValue }) {
           role="img"
           aria-label={`${centerLabel || 'Distribution'} chart`}
         >
-          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#e5e7eb" strokeWidth="4" />
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#c1e8ff" strokeWidth="4" />
           <g transform="rotate(-90 21 21)">
             {segments.map((s, i) => {
               const pct = safeTotal ? (s.value / safeTotal) * 100 : 0
@@ -98,8 +98,8 @@ export function DonutChart({ segments, total, centerLabel, centerValue }) {
         {centerLabel && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-xl font-bold text-gray-900">{centerValue}</div>
-              <div className="text-xs text-gray-500">{centerLabel}</div>
+              <div className="text-xl font-bold text-heading">{centerValue}</div>
+              <div className="text-xs text-muted">{centerLabel}</div>
             </div>
           </div>
         )}
@@ -109,9 +109,9 @@ export function DonutChart({ segments, total, centerLabel, centerValue }) {
           <div key={i} className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
               <span className="w-3 h-3 rounded-full" style={{ backgroundColor: s.color }} />
-              <span className="text-gray-600">{s.label}</span>
+              <span className="text-muted">{s.label}</span>
             </div>
-            <span className="font-medium text-gray-900">{s.value}</span>
+            <span className="font-medium text-heading">{s.value}</span>
           </div>
         ))}
       </div>
@@ -131,14 +131,14 @@ export function ProgressRing({ value, total, label }) {
           role="img"
           aria-label={`${label}: ${pct}%`}
         >
-          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#e5e7eb" strokeWidth="4" />
+          <circle cx="21" cy="21" r="15.9155" fill="none" stroke="#c1e8ff" strokeWidth="4" />
           <g transform="rotate(-90 21 21)">
             <circle
               cx="21"
               cy="21"
               r="15.9155"
               fill="none"
-              stroke="#22c55e"
+              stroke="#052659"
               strokeWidth="4"
               strokeDasharray={`${pct} ${100 - pct}`}
             />
@@ -146,12 +146,12 @@ export function ProgressRing({ value, total, label }) {
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900">{pct}%</div>
-            <div className="text-xs text-gray-500">{label}</div>
+            <div className="text-2xl font-bold text-heading">{pct}%</div>
+            <div className="text-xs text-muted">{label}</div>
           </div>
         </div>
       </div>
-      <div className="mt-2 text-sm text-gray-600">
+      <div className="mt-2 text-sm text-muted">
         {value} of {total}
       </div>
     </div>

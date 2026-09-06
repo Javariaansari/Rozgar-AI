@@ -282,11 +282,11 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-page-bg">
       <nav className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold">Rozgar AI</h1>
-          <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+          <button onClick={handleLogout} className="text-sm text-muted hover:text-primary">
             Sign Out
           </button>
         </div>
@@ -296,12 +296,12 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-lg font-semibold">Worker Dashboard</h2>
-            <p className="text-sm text-gray-600">Welcome back, {profile?.name || 'Worker'}.</p>
+            <p className="text-sm text-muted">Welcome back, {profile?.name || 'Worker'}.</p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => router.push('/worker/profile')}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded text-sm font-medium hover:bg-gray-200"
+              className="px-4 py-2 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200"
             >
               Edit Resume
             </button>
@@ -330,21 +330,21 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
         <div className="mb-6 bg-white rounded-lg shadow p-5">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Voice Resume</h3>
-              <p className="text-sm text-gray-600 mt-0.5">
+              <h3 className="text-sm font-bold text-heading uppercase tracking-wide">Voice Resume</h3>
+              <p className="text-sm text-muted mt-0.5">
                 Speak your name, skills, experience, and location to auto-update your resume.
               </p>
             </div>
             <button
               onClick={() => setShowVoice((s) => !s)}
-              className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700"
+              className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark"
             >
               {showVoice ? 'Close' : '🎙️ Record Voice Resume'}
             </button>
           </div>
 
           {showVoice && (
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-4 pt-4 border-t border-line">
               {voiceError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">{voiceError}</div>}
 
               {speechSupported && (
@@ -355,7 +355,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
                     className={`px-4 py-2 rounded text-white text-sm font-medium transition ${
                       isListening
                         ? 'bg-red-500 hover:bg-red-600'
-                        : 'bg-blue-600 hover:bg-blue-700'
+                        : 'bg-primary hover:bg-primary-dark'
                     } disabled:opacity-50`}
                   >
                     {isListening ? 'Stop Recording' : 'Use Microphone'}
@@ -364,7 +364,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
                     value={speechLang}
                     onChange={(e) => setSpeechLang(e.target.value)}
                     disabled={isListening}
-                    className="px-3 py-2 border border-gray-300 rounded text-sm bg-white disabled:opacity-50"
+                    className="px-3 py-2 border border-line-strong rounded text-sm bg-white disabled:opacity-50"
                   >
                     <option value="en-IN">English + Roman Urdu (en-IN)</option>
                     <option value="ur-PK">Urdu (ur-PK)</option>
@@ -375,11 +375,11 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
               )}
 
               {(isListening || transcript || interim) && (
-                <div className="mb-4 p-4 bg-gray-900 text-white rounded-lg min-h-[80px]">
+                <div className="mb-4 p-4 bg-primary-dark text-white rounded-lg min-h-[80px]">
                   <p className="text-base leading-relaxed whitespace-pre-wrap" dir="auto">
                     {transcript}
-                    {interim && <span className="text-gray-400"> {interim}</span>}
-                    {!transcript && !interim && <span className="text-gray-500 italic">Start speaking...</span>}
+                    {interim && <span className="text-subtle"> {interim}</span>}
+                    {!transcript && !interim && <span className="text-muted italic">Start speaking...</span>}
                   </p>
                 </div>
               )}
@@ -388,7 +388,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
                 value={transcript}
                 onChange={(e) => setTranscript(e.target.value)}
                 placeholder="e.g. My name is Ahmed. I am an electrician with 5 years of experience. I live in Lahore."
-                className="w-full h-32 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mb-4"
+                className="w-full h-32 px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm mb-4"
               />
 
               <button
@@ -405,13 +405,13 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
         <div className="mb-6 bg-white rounded-lg shadow p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">My Applications</h3>
-              <p className="text-sm text-gray-600 mt-0.5">Jobs you applied to. Raise a dispute if something is wrong.</p>
+              <h3 className="text-sm font-bold text-heading uppercase tracking-wide">My Applications</h3>
+              <p className="text-sm text-muted mt-0.5">Jobs you applied to. Raise a dispute if something is wrong.</p>
             </div>
             <button
               onClick={loadApplications}
               disabled={loadingApplications}
-              className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-xs font-medium hover:bg-gray-200 disabled:opacity-50"
+              className="px-3 py-1.5 bg-navy-100 text-body rounded text-xs font-medium hover:bg-navy-200 disabled:opacity-50"
             >
               {loadingApplications ? 'Loading...' : 'Refresh'}
             </button>
@@ -420,15 +420,15 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
           {applicationsError && <div className="mb-3 p-2 bg-red-50 text-red-700 rounded text-sm">{applicationsError}</div>}
 
           {applications.length === 0 && !loadingApplications && (
-            <p className="text-sm text-gray-500">No applications yet. Go to Find Jobs to apply.</p>
+            <p className="text-sm text-muted">No applications yet. Go to Find Jobs to apply.</p>
           )}
 
           <div className="space-y-3">
             {applications.map((app) => (
-              <div key={app.id} className="border border-gray-200 rounded p-3 flex items-start justify-between gap-3">
+              <div key={app.id} className="border border-line rounded p-3 flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-medium text-sm text-gray-900">{app.job?.title || 'Job'}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="font-medium text-sm text-heading">{app.job?.title || 'Job'}</p>
+                  <p className="text-xs text-muted">
                     {app.job?.customer?.name || 'Customer'}
                     {app.job?.customer?.phone && ` • 📞 ${app.job.customer.phone}`}
                     {' • '}
@@ -440,7 +440,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
                         ? 'bg-green-100 text-green-800'
                         : app.status === 'rejected'
                         ? 'bg-red-100 text-red-800'
-                        : 'bg-gray-100 text-gray-800'
+                        : 'bg-navy-100 text-heading'
                     }`}
                   >
                     {app.status}
@@ -468,7 +468,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
 
         <div className="grid md:grid-cols-3 gap-6">
           <div className="md:col-span-2 bg-white rounded-lg shadow overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-700 to-blue-500 px-6 py-8 text-white">
+            <div className="bg-gradient-to-r from-primary via-navy-800 to-accent px-6 py-8 text-white">
               <div className="flex items-start gap-5">
                 <div className="w-24 h-24 rounded-full bg-white/20 overflow-hidden flex items-center justify-center border-2 border-white/40 flex-shrink-0">
                   {workerProfile?.profile_pic_url ? (
@@ -479,10 +479,10 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
                 </div>
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold">{profile?.name || 'No name set'}</h3>
-                  <p className="text-blue-100 mt-1">
+                  <p className="text-navy-100 mt-1">
                     {workerProfile?.skills?.slice(0, 3).join(' • ') || 'General Labor'}
                   </p>
-                  <div className="mt-3 flex flex-wrap gap-3 text-sm text-blue-50">
+                  <div className="mt-3 flex flex-wrap gap-3 text-sm text-navy-50">
                     {profile?.phone && <span>📞 {profile.phone}</span>}
                     {workerProfile?.location && <span>📍 {workerProfile.location}</span>}
                     {workerProfile?.experience_years != null && (
@@ -498,16 +498,16 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
 
             <div className="p-6 space-y-6">
               <section>
-                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">
+                <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">
                   Professional Summary
                 </h4>
-                <p className="text-sm text-gray-700 leading-relaxed">
+                <p className="text-sm text-body leading-relaxed">
                   {workerProfile?.bio || profile?.bio || 'No professional summary added yet.'}
                 </p>
               </section>
 
               <section>
-                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">
+                <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">
                   Skills
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -515,24 +515,24 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
                     workerProfile.skills.map((skill, i) => (
                       <span
                         key={i}
-                        className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm font-medium border border-blue-100"
+                        className="bg-navy-50 text-navy-900 px-3 py-1 rounded-full text-sm font-medium border border-navy-200"
                       >
                         {skill}
                       </span>
                     ))
                   ) : (
-                    <span className="text-sm text-gray-400">No skills added yet</span>
+                    <span className="text-sm text-subtle">No skills added yet</span>
                   )}
                 </div>
               </section>
 
               {workerProfile?.voice_transcript && (
                 <section>
-                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">
+                  <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">
                     Voice Resume
                   </h4>
-                  <div className="bg-gray-50 border border-gray-200 rounded p-4">
-                    <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap" dir="auto">
+                  <div className="bg-page-bg border border-line rounded p-4">
+                    <p className="text-sm text-body leading-relaxed whitespace-pre-wrap" dir="auto">
                       {workerProfile.voice_transcript}
                     </p>
                   </div>
@@ -540,7 +540,7 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
               )}
 
               <section>
-                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">
+                <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">
                   Trust & Verification
                 </h4>
                 <span
@@ -555,33 +555,33 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
               </section>
 
               <section>
-                <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">
+                <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">
                   Reviews & Ratings
                 </h4>
                 {reviews.length > 0 ? (
                   <div className="space-y-4">
                     <div className="flex items-center gap-2">
-                      <span className="text-2xl font-bold text-gray-900">
+                      <span className="text-2xl font-bold text-heading">
                         {(reviews.reduce((a, r) => a + r.stars, 0) / reviews.length).toFixed(1)}
                       </span>
                       <span className="text-yellow-500">{'★'.repeat(Math.round(reviews.reduce((a, r) => a + r.stars, 0) / reviews.length))}</span>
-                      <span className="text-sm text-gray-500">({reviews.length} review{reviews.length > 1 ? 's' : ''})</span>
+                      <span className="text-sm text-muted">({reviews.length} review{reviews.length > 1 ? 's' : ''})</span>
                     </div>
                     {reviews.map((review) => (
-                      <div key={review.id} className="bg-gray-50 border border-gray-200 rounded p-3">
+                      <div key={review.id} className="bg-page-bg border border-line rounded p-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-gray-900">{review.reviewer_name}</span>
+                          <span className="text-sm font-medium text-heading">{review.reviewer_name}</span>
                           <span className="text-xs text-yellow-600 font-medium">{'★'.repeat(review.stars)}</span>
                         </div>
-                        <p className="text-xs text-gray-500 mt-0.5">{review.job_title}</p>
+                        <p className="text-xs text-muted mt-0.5">{review.job_title}</p>
                         {review.review_text && (
-                          <p className="text-sm text-gray-700 mt-2 leading-relaxed">{review.review_text}</p>
+                          <p className="text-sm text-body mt-2 leading-relaxed">{review.review_text}</p>
                         )}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-400">No reviews yet.</p>
+                  <p className="text-sm text-subtle">No reviews yet.</p>
                 )}
               </section>
             </div>
@@ -589,31 +589,31 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
 
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow p-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-4">AI Skill Score</h3>
+              <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-4">AI Skill Score</h3>
               {workerProfile?.ai_skill_score && Object.keys(workerProfile.ai_skill_score).length > 0 ? (
                 <div className="space-y-3">
                   {Object.entries(workerProfile.ai_skill_score).map(([skill, score]) => (
                     <div key={skill} className="flex items-center gap-3 text-sm">
-                      <span className="text-gray-700 w-20 font-medium truncate">{skill}</span>
-                      <div className="flex-1 bg-gray-200 rounded-full h-2">
-                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${score}%` }} />
+                      <span className="text-body w-20 font-medium truncate">{skill}</span>
+                      <div className="flex-1 bg-navy-100 rounded-full h-2">
+                        <div className="bg-primary h-2 rounded-full" style={{ width: `${score}%` }} />
                       </div>
-                      <span className="text-xs font-semibold text-gray-600 w-8 text-right">{score}%</span>
+                      <span className="text-xs font-semibold text-muted w-8 text-right">{score}%</span>
                     </div>
                   ))}
                   <button
                     onClick={() => router.push('/worker/assessment')}
-                    className="w-full mt-4 py-2 px-4 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700"
+                    className="w-full mt-4 py-2 px-4 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark"
                   >
                     Retake Assessment
                   </button>
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <p className="text-sm text-gray-500 mb-3">No assessment taken yet.</p>
+                  <p className="text-sm text-muted mb-3">No assessment taken yet.</p>
                   <button
                     onClick={() => router.push('/worker/assessment')}
-                    className="w-full py-2 px-4 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700"
+                    className="w-full py-2 px-4 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark"
                   >
                     Start AI Assessment
                   </button>
@@ -622,23 +622,23 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
             </div>
 
             <div className="bg-white rounded-lg shadow p-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-3">Quick Actions</h3>
+              <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-3">Quick Actions</h3>
               <div className="space-y-2">
                 <button
                   onClick={() => router.push('/worker/profile')}
-                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-gray-50 text-gray-700 hover:bg-gray-100"
+                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-page-bg text-body hover:bg-navy-100"
                 >
                   ✏️ Edit Resume
                 </button>
                 <button
                   onClick={() => router.push('/worker/jobs')}
-                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-gray-50 text-gray-700 hover:bg-gray-100"
+                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-page-bg text-body hover:bg-navy-100"
                 >
                   🔍 Find Matching Jobs
                 </button>
                 <button
                   onClick={() => router.push('/worker/assessment')}
-                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-gray-50 text-gray-700 hover:bg-gray-100"
+                  className="w-full text-left px-4 py-2 rounded text-sm font-medium bg-page-bg text-body hover:bg-navy-100"
                 >
                   🧠 AI Skill Assessment
                 </button>
@@ -653,8 +653,8 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
 
             {canGiveFeedback && (
               <div className="bg-white rounded-lg shadow p-5">
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Share Your Feedback</h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-2">Share Your Feedback</h3>
+                <p className="text-sm text-muted mb-4">
                   Apna experience share karein — voice ya text ke zariye. Admin review ke baad yeh homepage par show hoga.
                 </p>
                 <FeedbackForm name={profile?.name || ''} role="worker" />
@@ -664,10 +664,10 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
         </div>
 
         {disputeJobId && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-primary-dark/50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Raise Dispute</h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-2">Raise Dispute</h3>
+              <p className="text-sm text-muted mb-4">
                 Describe the issue with this job. Admin will review and contact you.
               </p>
 
@@ -680,14 +680,14 @@ export default function WorkerDashboard({ profile, workerProfile, reviews = [], 
                 onChange={(e) => setDisputeReason(e.target.value)}
                 placeholder="e.g. The customer refused to pay after the work was done..."
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent mb-4"
               />
 
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={closeDispute}
                   disabled={disputeLoading}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded text-sm font-medium hover:bg-gray-200 disabled:opacity-50"
+                  className="px-4 py-2 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
                 >
                   Cancel
                 </button>

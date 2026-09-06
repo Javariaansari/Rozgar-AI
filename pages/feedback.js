@@ -27,15 +27,15 @@ export async function getServerSideProps(context) {
 
 export default function Feedback() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-page-bg flex items-center justify-center px-4">
       <div className="bg-white rounded-lg shadow p-6 max-w-md w-full text-center">
         <h1 className="text-lg font-semibold mb-2">Apna Feedback Dein</h1>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-muted mb-4">
           Verified customers and workers can share feedback directly from their dashboard.
         </p>
         <Link
           href="/login"
-          className="inline-block px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700"
+          className="inline-block px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark"
         >
           Login
         </Link>

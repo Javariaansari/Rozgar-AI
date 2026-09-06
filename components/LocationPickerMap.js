@@ -86,7 +86,7 @@ export default function LocationPickerMap({ lat, lng, onPick, height = 280 }) {
   return (
     <div
       ref={containerRef}
-      className="w-full rounded border border-gray-300"
+      className="w-full rounded border border-line-strong"
       style={{ height: `${height}px` }}
     />
   )

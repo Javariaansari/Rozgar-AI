@@ -57,17 +57,17 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-page-bg">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow relative">
         <button
           type="button"
           onClick={() => (window.history.length > 1 ? router.back() : router.push('/home'))}
-          className="absolute top-4 left-4 px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 flex items-center gap-1"
+          className="absolute top-4 left-4 px-3 py-1.5 text-sm bg-navy-100 text-body rounded hover:bg-navy-200 flex items-center gap-1"
         >
           ← Back
         </button>
         <h1 className="text-2xl font-bold text-center mb-6">Rozgar AI</h1>
-        <h2 className="text-lg text-center text-gray-600 mb-8">Sign In</h2>
+        <h2 className="text-lg text-center text-muted mb-8">Sign In</h2>
 
         {message === 'check-email' && (
           <div className="mb-4 p-3 bg-green-50 text-green-700 rounded text-sm">
@@ -93,7 +93,7 @@ export default function Login() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-body mb-1">
               Email
             </label>
             <input
@@ -102,12 +102,12 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-sm font-medium text-body mb-1">
               Password
             </label>
             <input
@@ -117,21 +117,21 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent"
             />
-            <label className="mt-2 flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+            <label className="mt-2 flex items-center gap-2 text-sm text-muted cursor-pointer">
               <input
                 type="checkbox"
                 checked={showPassword}
                 onChange={(e) => setShowPassword(e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="rounded border-line-strong text-primary focus:ring-accent"
               />
               Show password
             </label>
           </div>
 
           <div className="text-right">
-            <Link href="/forgot-password" className="text-sm text-blue-600 hover:underline">
+            <Link href="/forgot-password" className="text-sm text-primary hover:underline">
               Forgot password?
             </Link>
           </div>
@@ -139,7 +139,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
@@ -147,10 +147,10 @@ export default function Login() {
 
         <div className="relative mt-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
+            <div className="w-full border-t border-line" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            <span className="px-2 bg-white text-muted">Or continue with</span>
           </div>
         </div>
 
@@ -158,7 +158,7 @@ export default function Login() {
           type="button"
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="mt-4 w-full py-2 px-4 border border-gray-300 bg-white text-gray-700 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="mt-4 w-full py-2 px-4 border border-line-strong bg-white text-body rounded hover:bg-navy-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -184,7 +184,7 @@ export default function Login() {
         <div className="mt-4">
           <Link
             href="/signup"
-            className="block w-full py-2 px-4 text-center border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
+            className="block w-full py-2 px-4 text-center border border-primary text-primary rounded hover:bg-navy-50"
           >
             Create Account
           </Link>
@@ -193,15 +193,15 @@ export default function Login() {
         <div className="mt-4">
           <Link
             href="/home"
-            className="block w-full py-2 px-4 text-center bg-gray-800 text-white rounded hover:bg-gray-900"
+            className="block w-full py-2 px-4 text-center bg-navy-900 text-white rounded hover:bg-navy-950"
           >
             Go to Home
           </Link>
         </div>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-sm text-muted">
           Don&apos;t have an account?{' '}
-          <Link href="/signup" className="text-blue-600 hover:underline">
+          <Link href="/signup" className="text-primary hover:underline">
             Sign Up
           </Link>
         </p>

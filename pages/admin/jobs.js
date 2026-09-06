@@ -3,10 +3,10 @@ import { requireAdminPage } from '@/lib/requireAdmin'
 import AdminLayout from '@/components/AdminLayout'
 
 const STATUS_BADGES = {
-  open: 'bg-blue-100 text-blue-800',
+  open: 'bg-navy-100 text-navy-900',
   in_progress: 'bg-yellow-100 text-yellow-800',
   completed: 'bg-green-100 text-green-800',
-  cancelled: 'bg-gray-100 text-gray-800',
+  cancelled: 'bg-navy-100 text-heading',
 }
 
 export default function AdminJobs({ profile }) {
@@ -120,12 +120,12 @@ export default function AdminJobs({ profile }) {
             placeholder="Search title, description, location"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
           />
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
           >
             <option value="">All statuses</option>
             <option value="open">Open</option>
@@ -133,16 +133,16 @@ export default function AdminJobs({ profile }) {
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
           </select>
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <label className="flex items-center gap-2 text-sm text-body">
             <input
               type="checkbox"
               checked={flagged}
               onChange={(e) => setFlagged(e.target.checked)}
-              className="rounded border-gray-300"
+              className="rounded border-line-strong"
             />
             Flagged only
           </label>
-          <div className="text-sm text-gray-600 flex items-center">
+          <div className="text-sm text-muted flex items-center">
             {total} job{total !== 1 && 's'} found
           </div>
         </div>
@@ -151,7 +151,7 @@ export default function AdminJobs({ profile }) {
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
-            <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+            <thead className="bg-page-bg text-xs uppercase tracking-wide text-muted">
               <tr>
                 <th className="px-4 py-3 text-left font-medium">Job</th>
                 <th className="px-4 py-3 text-left font-medium">Customer</th>
@@ -161,28 +161,28 @@ export default function AdminJobs({ profile }) {
                 <th className="px-4 py-3 text-left font-medium">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-line">
               {loading && jobs.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-6 text-center text-gray-500">Loading...</td>
+                  <td colSpan={6} className="px-4 py-6 text-center text-muted">Loading...</td>
                 </tr>
               ) : jobs.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-6 text-center text-gray-500">No jobs found.</td>
+                  <td colSpan={6} className="px-4 py-6 text-center text-muted">No jobs found.</td>
                 </tr>
               ) : (
                 jobs.map((job) => (
-                  <tr key={job.id} className={`hover:bg-gray-50 ${job.is_flagged ? 'bg-red-50' : ''}`}>
+                  <tr key={job.id} className={`hover:bg-navy-50 ${job.is_flagged ? 'bg-red-50' : ''}`}>
                     <td className="px-4 py-3">
-                      <div className="font-medium text-gray-900">{job.title}</div>
-                      <div className="text-xs text-gray-500">{job.category || 'No category'}</div>
+                      <div className="font-medium text-heading">{job.title}</div>
+                      <div className="text-xs text-muted">{job.category || 'No category'}</div>
                       {job.is_flagged && job.flag_reason && (
                         <div className="text-xs text-red-600 mt-1">Flagged: {job.flag_reason}</div>
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <div className="text-gray-900">{job.customer?.name || '(No name)'}</div>
-                      <div className="text-xs text-gray-500">{job.customer?.email}</div>
+                      <div className="text-heading">{job.customer?.name || '(No name)'}</div>
+                      <div className="text-xs text-muted">{job.customer?.email}</div>
                     </td>
                     <td className="px-4 py-3">
                       <select
@@ -197,8 +197,8 @@ export default function AdminJobs({ profile }) {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td className="px-4 py-3 text-gray-700">{job.application_count}</td>
-                    <td className="px-4 py-3 text-gray-600">{new Date(job.created_at).toLocaleDateString()}</td>
+                    <td className="px-4 py-3 text-body">{job.application_count}</td>
+                    <td className="px-4 py-3 text-muted">{new Date(job.created_at).toLocaleDateString()}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <button
@@ -206,7 +206,7 @@ export default function AdminJobs({ profile }) {
                           disabled={actionBusy === `flag-${job.id}`}
                           className={`px-2 py-1 rounded text-xs font-medium disabled:opacity-50 ${
                             job.is_flagged
-                              ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                              ? 'bg-navy-100 text-body hover:bg-navy-200'
                               : 'bg-red-50 text-red-700 hover:bg-red-100'
                           }`}
                         >
@@ -228,21 +228,21 @@ export default function AdminJobs({ profile }) {
           </table>
         </div>
 
-        <div className="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
+        <div className="px-4 py-3 border-t border-line flex items-center justify-between">
           <button
             onClick={() => fetchJobs(page - 1)}
             disabled={page <= 1 || loading}
-            className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+            className="px-3 py-1.5 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
           >
             Previous
           </button>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-muted">
             Page {page} of {totalPages} ({total} total)
           </span>
           <button
             onClick={() => fetchJobs(page + 1)}
             disabled={page >= totalPages || loading}
-            className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+            className="px-3 py-1.5 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
           >
             Next
           </button>

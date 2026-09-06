@@ -32,17 +32,17 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-page-bg">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow relative">
         <button
           type="button"
           onClick={() => (window.history.length > 1 ? router.back() : router.push('/login'))}
-          className="absolute top-4 left-4 px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 flex items-center gap-1"
+          className="absolute top-4 left-4 px-3 py-1.5 text-sm bg-navy-100 text-body rounded hover:bg-navy-200 flex items-center gap-1"
         >
           ← Back
         </button>
         <h1 className="text-2xl font-bold text-center mb-6">Rozgar AI</h1>
-        <h2 className="text-lg text-center text-gray-600 mb-8">Reset Password</h2>
+        <h2 className="text-lg text-center text-muted mb-8">Reset Password</h2>
 
         {success && (
           <div className="mb-4 p-3 bg-green-50 text-green-700 rounded text-sm">{success}</div>
@@ -53,7 +53,7 @@ export default function ForgotPassword() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-sm font-medium text-body mb-1">
               Email
             </label>
             <input
@@ -62,22 +62,22 @@ export default function ForgotPassword() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading || !email.trim()}
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Sending...' : 'Send Reset Link'}
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-4 text-center text-sm text-muted">
           Remember your password?{' '}
-          <Link href="/login" className="text-blue-600 hover:underline">
+          <Link href="/login" className="text-primary hover:underline">
             Sign In
           </Link>
         </p>

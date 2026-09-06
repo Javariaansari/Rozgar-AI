@@ -131,18 +131,18 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-page-bg">
       <nav className="bg-white shadow-sm">
         <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold">Rozgar AI</h1>
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/worker/dashboard')}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               Dashboard
             </button>
-            <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+            <button onClick={handleLogout} className="text-sm text-muted hover:text-primary">
               Sign Out
             </button>
           </div>
@@ -165,7 +165,7 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
               </button>
               <button
                 onClick={() => router.push('/worker/assessment')}
-                className="px-4 py-1.5 rounded text-sm font-medium bg-blue-100 text-blue-700 hover:bg-blue-200"
+                className="px-4 py-1.5 rounded text-sm font-medium bg-navy-100 text-primary hover:bg-navy-200"
               >
                 AI Assessment
               </button>
@@ -175,7 +175,7 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
                 className={`px-4 py-1.5 rounded text-sm font-medium ${
                   editing
                     ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-navy-100 text-body hover:bg-navy-200'
                 } disabled:opacity-50`}
               >
                 {editing ? 'Save' : 'Edit'}
@@ -187,83 +187,83 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
             <div className="space-y-4">
               <div className="flex items-start gap-6 mb-6">
                 <div className="flex-shrink-0 text-center">
-                  <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center">
+                  <div className="w-24 h-24 rounded-full bg-navy-100 overflow-hidden flex items-center justify-center">
                     {workerProfile?.profile_pic_url ? (
                       <img src={workerProfile.profile_pic_url} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
-                      <span className="text-3xl text-gray-400">?</span>
+                      <span className="text-3xl text-subtle">?</span>
                     )}
                   </div>
                   <input ref={picInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleUpload(e, 'profile_pic')} />
                   <button
                     onClick={() => picInputRef.current?.click()}
                     disabled={uploading}
-                    className="mt-2 text-xs text-blue-600 hover:underline disabled:opacity-50"
+                    className="mt-2 text-xs text-primary hover:underline disabled:opacity-50"
                   >
                     {uploading ? 'Uploading...' : 'Change photo'}
                   </button>
                 </div>
                 <div className="flex-1 space-y-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Name</label>
+                    <label className="block text-xs font-medium text-muted mb-1">Name</label>
                     <input
                       value={form.name}
                       onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
-                      className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-2 py-1.5 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">Phone</label>
+                    <label className="block text-xs font-medium text-muted mb-1">Phone</label>
                     <input
                       value={form.phone}
                       onChange={(e) => setForm(f => ({ ...f, phone: e.target.value }))}
-                      className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full px-2 py-1.5 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                     />
                   </div>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Experience (years)</label>
+                  <label className="block text-xs font-medium text-muted mb-1">Experience (years)</label>
                   <input
                     type="number"
                     value={form.experience_years}
                     onChange={(e) => setForm(f => ({ ...f, experience_years: e.target.value }))}
-                    className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1.5 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">Location</label>
+                  <label className="block text-xs font-medium text-muted mb-1">Location</label>
                   <input
                     value={form.location}
                     onChange={(e) => setForm(f => ({ ...f, location: e.target.value }))}
                     placeholder="e.g. Karachi"
-                    className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1.5 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Skills</label>
+                <label className="block text-xs font-medium text-muted mb-1">Skills</label>
                 <input
                   value={form.skills}
                   onChange={(e) => setForm(f => ({ ...f, skills: e.target.value }))}
                   placeholder="electrician, plumber, painter (comma-separated)"
-                  className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1.5 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Professional Summary</label>
+                <label className="block text-xs font-medium text-muted mb-1">Professional Summary</label>
                 <textarea
                   value={form.bio}
                   onChange={(e) => setForm(f => ({ ...f, bio: e.target.value }))}
                   rows={3}
-                  className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-2 py-1.5 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                 />
               </div>
             </div>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-700 to-blue-500 px-6 py-8 text-white">
+            <div className="bg-white border border-line rounded-lg overflow-hidden">
+              <div className="bg-gradient-to-r from-primary via-navy-800 to-accent px-6 py-8 text-white">
                 <div className="flex items-start gap-5">
                   <div className="text-center">
                     <div className="w-24 h-24 rounded-full bg-white/20 overflow-hidden flex items-center justify-center border-2 border-white/40">
@@ -277,15 +277,15 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
                     <button
                       onClick={() => picInputRef.current?.click()}
                       disabled={uploading}
-                      className="mt-2 text-xs text-blue-100 hover:text-white hover:underline disabled:opacity-50"
+                      className="mt-2 text-xs text-navy-100 hover:text-white hover:underline disabled:opacity-50"
                     >
                       {uploading ? 'Uploading...' : 'Change photo'}
                     </button>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold">{profile?.name || 'No name set'}</h3>
-                    <p className="text-blue-100 mt-1">{workerProfile?.skills?.slice(0, 3).join(' • ') || 'General Labor'}</p>
-                    <div className="mt-3 flex flex-wrap gap-3 text-sm text-blue-50">
+                    <p className="text-navy-100 mt-1">{workerProfile?.skills?.slice(0, 3).join(' • ') || 'General Labor'}</p>
+                    <div className="mt-3 flex flex-wrap gap-3 text-sm text-navy-50">
                       {profile?.phone && <span>📞 {profile.phone}</span>}
                       {profile?.email && <span>✉️ {profile.email}</span>}
                       {workerProfile?.location ? <span>📍 {workerProfile.location}</span> : null}
@@ -296,55 +296,55 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
 
               <div className="p-6 space-y-6">
                 <section>
-                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Professional Summary</h4>
-                  <p className="text-sm text-gray-700 leading-relaxed">{workerProfile?.bio || profile?.bio || 'No professional summary added yet.'}</p>
+                  <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">Professional Summary</h4>
+                  <p className="text-sm text-body leading-relaxed">{workerProfile?.bio || profile?.bio || 'No professional summary added yet.'}</p>
                 </section>
 
                 <section>
-                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Skills</h4>
+                  <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">Skills</h4>
                   <div className="flex flex-wrap gap-2">
                     {workerProfile?.skills?.length > 0 ? workerProfile.skills.map((skill, i) => (
-                      <span key={i} className="bg-blue-50 text-blue-800 px-3 py-1 rounded-full text-sm font-medium border border-blue-100">{skill}</span>
+                      <span key={i} className="bg-navy-50 text-navy-900 px-3 py-1 rounded-full text-sm font-medium border border-navy-200">{skill}</span>
                     )) : (
-                      <span className="text-sm text-gray-400">No skills added yet</span>
+                      <span className="text-sm text-subtle">No skills added yet</span>
                     )}
                   </div>
                 </section>
 
                 <section>
-                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Experience</h4>
-                  <div className="text-sm text-gray-700">
+                  <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">Experience</h4>
+                  <div className="text-sm text-body">
                     {workerProfile?.experience_years ? (
                       <>
                         <p className="font-medium">{workerProfile.experience_years} years</p>
-                        <p className="text-gray-600 mt-1">Hands-on experience in {workerProfile.skills?.join(', ') || 'the listed skills'}.</p>
+                        <p className="text-muted mt-1">Hands-on experience in {workerProfile.skills?.join(', ') || 'the listed skills'}.</p>
                       </>
                     ) : (
-                      <p className="text-gray-500">Experience not specified. Edit profile to add years of experience.</p>
+                      <p className="text-muted">Experience not specified. Edit profile to add years of experience.</p>
                     )}
                   </div>
                 </section>
 
                 {workerProfile?.voice_transcript && (
                   <section>
-                    <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Voice Resume</h4>
-                    <div className="bg-gray-50 border border-gray-200 rounded p-4">
-                      <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap" dir="auto">{workerProfile.voice_transcript}</p>
+                    <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">Voice Resume</h4>
+                    <div className="bg-page-bg border border-line rounded p-4">
+                      <p className="text-sm text-body leading-relaxed whitespace-pre-wrap" dir="auto">{workerProfile.voice_transcript}</p>
                     </div>
                   </section>
                 )}
 
                 {workerProfile?.ai_skill_score && Object.keys(workerProfile.ai_skill_score).length > 0 && (
                   <section>
-                    <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">AI Skill Score</h4>
+                    <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">AI Skill Score</h4>
                     <div className="space-y-3">
                       {Object.entries(workerProfile.ai_skill_score).map(([skill, score]) => (
                         <div key={skill} className="flex items-center gap-3 text-sm">
-                          <span className="text-gray-700 w-28 font-medium">{skill}</span>
-                          <div className="flex-1 bg-gray-200 rounded-full h-2.5">
-                            <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${score}%` }} />
+                          <span className="text-body w-28 font-medium">{skill}</span>
+                          <div className="flex-1 bg-navy-100 rounded-full h-2.5">
+                            <div className="bg-primary h-2.5 rounded-full" style={{ width: `${score}%` }} />
                           </div>
-                          <span className="text-xs font-semibold text-gray-600 w-10 text-right">{score}%</span>
+                          <span className="text-xs font-semibold text-muted w-10 text-right">{score}%</span>
                         </div>
                       ))}
                     </div>
@@ -352,7 +352,7 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
                 )}
 
                 <section>
-                  <h4 className="text-sm font-bold text-gray-900 uppercase tracking-wide border-b border-gray-200 pb-2 mb-3">Trust & Verification</h4>
+                  <h4 className="text-sm font-bold text-heading uppercase tracking-wide border-b border-line pb-2 mb-3">Trust & Verification</h4>
                   <div className="flex flex-wrap items-center gap-3">
                     {workerProfile?.cnic_verified ? (
                       <span className="text-xs px-3 py-1 rounded-full font-medium bg-green-100 text-green-800">
@@ -363,7 +363,7 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
                         ⏳ Awaiting admin verification
                       </span>
                     ) : (
-                      <span className="text-xs px-3 py-1 rounded-full font-medium bg-gray-100 text-gray-800">
+                      <span className="text-xs px-3 py-1 rounded-full font-medium bg-navy-100 text-heading">
                         ⏳ CNIC Not Verified
                       </span>
                     )}
@@ -372,7 +372,7 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
                         href={workerProfile.cnic_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-600 hover:underline"
+                        className="text-xs text-primary hover:underline"
                       >
                         View uploaded CNIC
                       </a>
@@ -381,7 +381,7 @@ export default function WorkerProfile({ profile: initialProfile, workerProfile: 
                     <button
                       onClick={() => cnicInputRef.current?.click()}
                       disabled={uploading}
-                      className="text-xs text-blue-600 hover:underline disabled:opacity-50"
+                      className="text-xs text-primary hover:underline disabled:opacity-50"
                     >
                       {uploading ? 'Uploading...' : (workerProfile?.cnic_url ? 'Re-upload CNIC' : 'Upload CNIC')}
                     </button>

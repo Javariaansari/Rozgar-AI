@@ -115,17 +115,17 @@ export default function CompleteProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-600">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center bg-page-bg">
+        <p className="text-muted">Loading...</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-page-bg">
       <div className="w-full max-w-md p-8 bg-white rounded-lg shadow">
         <h1 className="text-2xl font-bold text-center mb-2">Rozgar AI</h1>
-        <h2 className="text-lg text-center text-gray-600 mb-6">Complete Your Profile</h2>
+        <h2 className="text-lg text-center text-muted mb-6">Complete Your Profile</h2>
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">{error}</div>
@@ -133,7 +133,7 @@ export default function CompleteProfile() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="phone" className="block text-sm font-medium text-body mb-1">
               Phone Number
             </label>
             <input
@@ -143,18 +143,18 @@ export default function CompleteProfile() {
               onChange={(e) => setPhone(e.target.value)}
               placeholder="e.g. +923001234567"
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">I am a</label>
+            <label className="block text-sm font-medium text-body mb-2">I am a</label>
             <div className="flex gap-4">
               <label
                 className={`flex-1 flex items-center justify-center p-3 border rounded cursor-pointer transition ${
                   role === 'worker'
-                    ? 'border-blue-600 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 hover:border-gray-400'
+                    ? 'border-primary bg-navy-50 text-primary'
+                    : 'border-line-strong hover:border-accent'
                 }`}
               >
                 <input
@@ -170,8 +170,8 @@ export default function CompleteProfile() {
               <label
                 className={`flex-1 flex items-center justify-center p-3 border rounded cursor-pointer transition ${
                   role === 'customer'
-                    ? 'border-blue-600 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 hover:border-gray-400'
+                    ? 'border-primary bg-navy-50 text-primary'
+                    : 'border-line-strong hover:border-accent'
                 }`}
               >
                 <input
@@ -190,7 +190,7 @@ export default function CompleteProfile() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? 'Saving...' : 'Continue'}
           </button>

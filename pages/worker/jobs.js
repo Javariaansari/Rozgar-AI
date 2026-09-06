@@ -80,18 +80,18 @@ export default function WorkerJobs({ profile, workerProfile }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-page-bg">
       <nav className="bg-white shadow-sm">
         <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold">Rozgar AI</h1>
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/worker/dashboard')}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               Dashboard
             </button>
-            <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+            <button onClick={handleLogout} className="text-sm text-muted hover:text-primary">
               Sign Out
             </button>
           </div>
@@ -102,21 +102,21 @@ export default function WorkerJobs({ profile, workerProfile }) {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-lg font-semibold">AI Job Matches</h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted">
               Your skills: {workerProfile?.skills?.join(', ') || 'general labor'}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => router.push('/worker/profile')}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               Skill Passport
             </button>
             <button
               onClick={findMatches}
               disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+              className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark disabled:opacity-50"
             >
               {loading ? 'Matching...' : 'Find Matches'}
             </button>
@@ -126,7 +126,7 @@ export default function WorkerJobs({ profile, workerProfile }) {
         {error && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">{error}</div>}
 
         {matches.length === 0 && !loading && (
-          <div className="bg-white rounded-lg shadow p-6 text-center text-gray-500 text-sm">
+          <div className="bg-white rounded-lg shadow p-6 text-center text-muted text-sm">
             No matches yet. Click <strong>Find Matches</strong> to see AI-recommended jobs.
           </div>
         )}
@@ -136,8 +136,8 @@ export default function WorkerJobs({ profile, workerProfile }) {
             <div key={job.id} className="bg-white rounded-lg shadow p-5">
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div>
-                  <h3 className="font-medium text-gray-900">{job.title}</h3>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="font-medium text-heading">{job.title}</h3>
+                  <p className="text-sm text-muted">
                     {job.customer?.name || 'Customer'}
                     {job.customer?.phone && ` • 📞 ${job.customer.phone}`}
                     {' • '}
@@ -145,24 +145,24 @@ export default function WorkerJobs({ profile, workerProfile }) {
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-lg font-bold text-blue-600">{job.match_score}%</div>
-                  <div className="text-xs text-gray-500">match</div>
+                  <div className="text-lg font-bold text-primary">{job.match_score}%</div>
+                  <div className="text-xs text-muted">match</div>
                 </div>
               </div>
 
-              <p className="text-sm text-gray-700 mb-3">{job.description || 'No description'}</p>
+              <p className="text-sm text-body mb-3">{job.description || 'No description'}</p>
 
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 {job.category && (
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">{job.category}</span>
+                  <span className="text-xs bg-navy-100 text-body px-2 py-0.5 rounded">{job.category}</span>
                 )}
                 {job.budget && (
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">PKR {job.budget}</span>
                 )}
               </div>
 
-              <div className="bg-blue-50 border border-blue-100 rounded p-3 mb-4">
-                <p className="text-sm text-blue-800">{job.reasoning}</p>
+              <div className="bg-navy-50 border border-navy-200 rounded p-3 mb-4">
+                <p className="text-sm text-navy-900">{job.reasoning}</p>
               </div>
 
               <button

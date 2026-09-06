@@ -385,27 +385,27 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
 
   const statusBadge = (status) => {
     const styles = {
-      open: 'bg-blue-100 text-blue-800',
+      open: 'bg-navy-100 text-navy-900',
       in_progress: 'bg-yellow-100 text-yellow-800',
       completed: 'bg-green-100 text-green-800',
-      cancelled: 'bg-gray-100 text-gray-800',
+      cancelled: 'bg-navy-100 text-heading',
     }
-    return styles[status] || 'bg-gray-100 text-gray-800'
+    return styles[status] || 'bg-navy-100 text-heading'
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-page-bg">
       <nav className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold">Rozgar AI</h1>
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/customer/post-job')}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               Post New Job
             </button>
-            <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+            <button onClick={handleLogout} className="text-sm text-muted hover:text-primary">
               Sign Out
             </button>
           </div>
@@ -416,12 +416,12 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-lg font-semibold">Customer Dashboard</h2>
-            <p className="text-sm text-gray-600">Manage your jobs and review applicants.</p>
+            <p className="text-sm text-muted">Manage your jobs and review applicants.</p>
           </div>
           <button
             onClick={loadJobs}
             disabled={loading}
-            className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark disabled:opacity-50"
           >
             {loading ? 'Loading...' : 'Load My Jobs'}
           </button>
@@ -432,14 +432,14 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         {!editingProfile ? (
           <div className="mb-6 bg-white rounded-lg shadow p-4 flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-900">{profile?.name || 'Customer'}</p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm font-medium text-heading">{profile?.name || 'Customer'}</p>
+              <p className="text-sm text-muted">
                 {profile?.phone ? `📞 ${profile.phone}` : 'Phone number required to post jobs and contact workers'}
               </p>
             </div>
             <button
               onClick={() => setEditingProfile(true)}
-              className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-xs font-medium hover:bg-gray-200"
+              className="px-3 py-1.5 bg-navy-100 text-body rounded text-xs font-medium hover:bg-navy-200"
             >
               {profile?.phone ? 'Edit Profile' : 'Add Phone'}
             </button>
@@ -448,21 +448,21 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
           <div className="mb-6 bg-white rounded-lg shadow p-4 space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Name</label>
+                <label className="block text-xs font-medium text-body mb-1">Name</label>
                 <input
                   value={profileForm.name}
                   onChange={(e) => setProfileForm((f) => ({ ...f, name: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                  className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Phone</label>
+                <label className="block text-xs font-medium text-body mb-1">Phone</label>
                 <input
                   type="tel"
                   value={profileForm.phone}
                   onChange={(e) => setProfileForm((f) => ({ ...f, phone: e.target.value }))}
                   placeholder="+923001234567"
-                  className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                  className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                 />
               </div>
             </div>
@@ -470,14 +470,14 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
               <button
                 onClick={() => setEditingProfile(false)}
                 disabled={savingProfile}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded text-sm font-medium hover:bg-gray-200 disabled:opacity-50"
+                className="px-4 py-2 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 onClick={saveProfile}
                 disabled={savingProfile}
-                className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark disabled:opacity-50"
               >
                 {savingProfile ? 'Saving...' : 'Save'}
               </button>
@@ -488,21 +488,21 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         <div className="mb-6 bg-white rounded-lg shadow p-5">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Post Job by Voice</h3>
-              <p className="text-sm text-gray-600 mt-0.5">
+              <h3 className="text-sm font-bold text-heading uppercase tracking-wide">Post Job by Voice</h3>
+              <p className="text-sm text-muted mt-0.5">
                 Speak the job title, work details, budget, and location. AI will create the job posting.
               </p>
             </div>
             <button
               onClick={() => setShowVoiceJob((s) => !s)}
-              className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700"
+              className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark"
             >
               {showVoiceJob ? 'Close' : '🎙️ Post Job by Voice'}
             </button>
           </div>
 
           {showVoiceJob && (
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-4 pt-4 border-t border-line">
               {voiceError && <div className="mb-4 p-3 bg-red-50 text-red-700 rounded text-sm">{voiceError}</div>}
 
               {speechSupported && (
@@ -513,7 +513,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                     className={`px-4 py-2 rounded text-white text-sm font-medium transition ${
                       isListening
                         ? 'bg-red-500 hover:bg-red-600'
-                        : 'bg-blue-600 hover:bg-blue-700'
+                        : 'bg-primary hover:bg-primary-dark'
                     } disabled:opacity-50`}
                   >
                     {isListening ? 'Stop Recording' : 'Use Microphone'}
@@ -522,7 +522,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                     value={speechLang}
                     onChange={(e) => setSpeechLang(e.target.value)}
                     disabled={isListening}
-                    className="px-3 py-2 border border-gray-300 rounded text-sm bg-white disabled:opacity-50"
+                    className="px-3 py-2 border border-line-strong rounded text-sm bg-white disabled:opacity-50"
                   >
                     <option value="en-IN">English + Roman Urdu (en-IN)</option>
                     <option value="ur-PK">Urdu (ur-PK)</option>
@@ -533,11 +533,11 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
               )}
 
               {(isListening || transcript || interim) && (
-                <div className="mb-4 p-4 bg-gray-900 text-white rounded-lg min-h-[80px]">
+                <div className="mb-4 p-4 bg-primary-dark text-white rounded-lg min-h-[80px]">
                   <p className="text-base leading-relaxed whitespace-pre-wrap" dir="auto">
                     {transcript}
-                    {interim && <span className="text-gray-400"> {interim}</span>}
-                    {!transcript && !interim && <span className="text-gray-500 italic">Start speaking...</span>}
+                    {interim && <span className="text-subtle"> {interim}</span>}
+                    {!transcript && !interim && <span className="text-muted italic">Start speaking...</span>}
                   </p>
                 </div>
               )}
@@ -546,7 +546,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                 value={transcript}
                 onChange={(e) => setTranscript(e.target.value)}
                 placeholder="e.g. I need an electrician for home wiring in Lahore. Budget is 5000 rupees."
-                className="w-full h-32 px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm mb-4"
+                className="w-full h-32 px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm mb-4"
               />
 
               <button
@@ -558,42 +558,42 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
               </button>
 
               {extractedJob && (
-                <div className="mt-5 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                  <h4 className="text-sm font-bold text-gray-900 mb-3">Review & Confirm Job</h4>
+                <div className="mt-5 p-4 bg-page-bg border border-line rounded-lg">
+                  <h4 className="text-sm font-bold text-heading mb-3">Review & Confirm Job</h4>
                   <div className="grid gap-3 mb-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">Title</label>
+                      <label className="block text-xs font-medium text-body mb-1">Title</label>
                       <input
                         value={extractedJob.title || ''}
                         onChange={(e) => setExtractedJob((j) => ({ ...j, title: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                        className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">Category</label>
+                      <label className="block text-xs font-medium text-body mb-1">Category</label>
                       <input
                         value={extractedJob.category || ''}
                         onChange={(e) => setExtractedJob((j) => ({ ...j, category: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                        className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                      <label className="block text-xs font-medium text-body mb-1">Description</label>
                       <textarea
                         value={extractedJob.description || ''}
                         onChange={(e) => setExtractedJob((j) => ({ ...j, description: e.target.value }))}
                         rows={3}
-                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                        className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Budget (PKR)</label>
+                        <label className="block text-xs font-medium text-body mb-1">Budget (PKR)</label>
                         <input
                           type="number"
                           value={extractedJob.budget || ''}
                           onChange={(e) => setExtractedJob((j) => ({ ...j, budget: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                          className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                         />
                       </div>
                       <LocationPicker
@@ -606,7 +606,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                   <button
                     onClick={postExtractedJob}
                     disabled={isPosting || !extractedJob.title?.trim() || !extractedJob.location?.trim()}
-                    className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                    className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
                   >
                     {isPosting ? 'Posting...' : 'Confirm & Post Job'}
                   </button>
@@ -617,9 +617,9 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         </div>
 
         {jobs.length === 0 && !loading && (
-          <div className="bg-white rounded-lg shadow p-6 text-center text-gray-500 text-sm">
+          <div className="bg-white rounded-lg shadow p-6 text-center text-muted text-sm">
             No jobs posted yet.{' '}
-            <button onClick={() => router.push('/customer/post-job')} className="text-blue-600 hover:underline">
+            <button onClick={() => router.push('/customer/post-job')} className="text-primary hover:underline">
               Post your first job
             </button>
           </div>
@@ -632,42 +632,42 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
 
             return (
               <div key={job.id} className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="p-5 border-b border-gray-100">
+                <div className="p-5 border-b border-line">
                   {editingJobId === job.id ? (
                     <div className="space-y-3">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Title</label>
+                        <label className="block text-xs font-medium text-body mb-1">Title</label>
                         <input
                           value={editForm.title}
                           onChange={(e) => setEditForm((f) => ({ ...f, title: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                          className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Category</label>
+                        <label className="block text-xs font-medium text-body mb-1">Category</label>
                         <input
                           value={editForm.category}
                           onChange={(e) => setEditForm((f) => ({ ...f, category: e.target.value }))}
-                          className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                          className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                        <label className="block text-xs font-medium text-body mb-1">Description</label>
                         <textarea
                           value={editForm.description}
                           onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
                           rows={3}
-                          className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                          className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-medium text-gray-700 mb-1">Budget (PKR)</label>
+                          <label className="block text-xs font-medium text-body mb-1">Budget (PKR)</label>
                           <input
                             type="number"
                             value={editForm.budget}
                             onChange={(e) => setEditForm((f) => ({ ...f, budget: e.target.value }))}
-                            className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                            className="w-full px-3 py-2 border border-line-strong rounded text-sm"
                           />
                         </div>
                         <LocationPicker
@@ -680,14 +680,14 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                         <button
                           onClick={() => saveJob(job.id)}
                           disabled={isSavingEdit || !editForm.title?.trim() || !editForm.location?.trim()}
-                          className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                          className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark disabled:opacity-50"
                         >
                           {isSavingEdit ? 'Saving...' : 'Save'}
                         </button>
                         <button
                           onClick={cancelEdit}
                           disabled={isSavingEdit}
-                          className="px-4 py-2 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+                          className="px-4 py-2 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
                         >
                           Cancel
                         </button>
@@ -697,14 +697,14 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                     <>
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <h3 className="font-medium text-gray-900">{job.title}</h3>
-                          <p className="text-sm text-gray-500 mt-0.5">{job.location || 'No location'} • PKR {job.budget || 'N/A'}</p>
+                          <h3 className="font-medium text-heading">{job.title}</h3>
+                          <p className="text-sm text-muted mt-0.5">{job.location || 'No location'} • PKR {job.budget || 'N/A'}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           {job.status === 'open' && (
                             <button
                               onClick={() => startEdit(job)}
-                              className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 font-medium"
+                              className="text-xs px-2 py-1 bg-navy-100 text-body rounded hover:bg-navy-200 font-medium"
                             >
                               Edit
                             </button>
@@ -726,36 +726,36 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                           </span>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-700 mt-3">{job.description || 'No description'}</p>
+                      <p className="text-sm text-body mt-3">{job.description || 'No description'}</p>
                     </>
                   )}
                 </div>
 
                 <div className="p-5">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-3">
+                  <h4 className="text-sm font-semibold text-heading mb-3">
                     Applicants ({job.applications?.length || 0})
                   </h4>
 
                   {job.applications?.length === 0 && (
-                    <p className="text-sm text-gray-500">No applications yet.</p>
+                    <p className="text-sm text-muted">No applications yet.</p>
                   )}
 
                   <div className="space-y-3">
                     {job.applications?.map((app) => (
-                      <div key={app.id} className="border border-gray-200 rounded p-3">
+                      <div key={app.id} className="border border-line rounded p-3">
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <p className="font-medium text-sm text-gray-900">
+                            <p className="font-medium text-sm text-heading">
                               {app.worker?.name || 'Worker'}
                             </p>
-                            <p className="text-xs text-gray-500">
+                            <p className="text-xs text-muted">
                               {app.worker_profile?.skills?.join(', ') || 'general labor'} •{' '}
                               {app.worker_profile?.experience_years != null
                                 ? `${app.worker_profile.experience_years} yrs exp`
                                 : 'experience not listed'}
                             </p>
                             {app.worker_profile?.ai_skill_score && (
-                              <p className="text-xs text-gray-500 mt-1">
+                              <p className="text-xs text-muted mt-1">
                                 AI Score:{' '}
                                 {Object.entries(app.worker_profile.ai_skill_score)
                                   .map(([k, v]) => `${k}: ${v}`)
@@ -769,7 +769,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                                 ? 'bg-green-100 text-green-800'
                                 : app.status === 'rejected'
                                 ? 'bg-red-100 text-red-800'
-                                : 'bg-gray-100 text-gray-800'
+                                : 'bg-navy-100 text-heading'
                             }`}
                           >
                             {app.status}
@@ -784,7 +784,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                         <div className="flex flex-wrap gap-2 mt-3">
                           <button
                             onClick={() => router.push(`/customer/worker/${app.worker?.id}`)}
-                            className="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded text-xs font-medium hover:bg-blue-100"
+                            className="px-3 py-1.5 bg-navy-50 text-primary border border-navy-200 rounded text-xs font-medium hover:bg-navy-100"
                           >
                             View Resume
                           </button>
@@ -798,7 +798,7 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                               </button>
                               <button
                                 onClick={() => updateApplication(app.id, 'rejected')}
-                                className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-xs font-medium hover:bg-gray-300"
+                                className="px-3 py-1.5 bg-navy-100 text-body rounded text-xs font-medium hover:bg-navy-200"
                               >
                                 Reject
                               </button>
@@ -810,20 +810,20 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                   </div>
 
                   {job.status === 'in_progress' && selectedApplicant && (
-                    <div className="mt-5 pt-5 border-t border-gray-100">
+                    <div className="mt-5 pt-5 border-t border-line">
                       {selectedApplicant.worker?.phone && (
                         <p className="text-sm text-green-700 font-medium mb-2">
                           📞 Worker phone: {selectedApplicant.worker.phone}
                         </p>
                       )}
-                      <p className="text-sm font-medium text-gray-900 mb-2">
+                      <p className="text-sm font-medium text-heading mb-2">
                         Work done? Rate {selectedApplicant.worker?.name || 'the worker'} and complete the job
                       </p>
                       <div className="flex flex-wrap items-center gap-3">
                         <select
                           value={rating[job.id] || ''}
                           onChange={(e) => setRating((r) => ({ ...r, [job.id]: e.target.value }))}
-                          className="px-3 py-2 border border-gray-300 rounded text-sm"
+                          className="px-3 py-2 border border-line-strong rounded text-sm"
                         >
                           <option value="">Rate</option>
                           {[1, 2, 3, 4, 5].map((s) => (
@@ -836,11 +836,11 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                           value={review[job.id] || ''}
                           onChange={(e) => setReview((r) => ({ ...r, [job.id]: e.target.value }))}
                           placeholder="Write a review (optional)"
-                          className="flex-1 min-w-[200px] px-3 py-2 border border-gray-300 rounded text-sm"
+                          className="flex-1 min-w-[200px] px-3 py-2 border border-line-strong rounded text-sm"
                         />
                         <button
                           onClick={() => completeJob(job.id)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700"
+                          className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark"
                         >
                           Complete Job
                         </button>
@@ -859,8 +859,8 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
 
         {canGiveFeedback && (
           <div className="mt-8 bg-white rounded-lg shadow p-5">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Share Your Feedback</h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-2">Share Your Feedback</h3>
+            <p className="text-sm text-muted mb-4">
               Apna experience share karein — voice ya text ke zariye. Admin review ke baad yeh homepage par show hoga.
             </p>
             <FeedbackForm name={profile?.name || ''} role="customer" />
@@ -868,10 +868,10 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
         )}
 
         {disputeJobId && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-primary-dark/50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-5">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-2">Raise Dispute</h3>
-              <p className="text-sm text-gray-600 mb-4">
+              <h3 className="text-sm font-bold text-heading uppercase tracking-wide mb-2">Raise Dispute</h3>
+              <p className="text-sm text-muted mb-4">
                 Describe the issue with this job. Admin will review and contact you.
               </p>
 
@@ -884,14 +884,14 @@ export default function CustomerDashboard({ profile, customerProfile, canGiveFee
                 onChange={(e) => setDisputeReason(e.target.value)}
                 placeholder="e.g. The worker did not show up after selection..."
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent mb-4"
               />
 
               <div className="flex gap-2 justify-end">
                 <button
                   onClick={closeDispute}
                   disabled={disputeLoading}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded text-sm font-medium hover:bg-gray-200 disabled:opacity-50"
+                  className="px-4 py-2 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
                 >
                   Cancel
                 </button>

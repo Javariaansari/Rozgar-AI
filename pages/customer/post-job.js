@@ -78,18 +78,18 @@ export default function PostJob({ profile }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-page-bg">
       <nav className="bg-white shadow-sm">
         <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold">Rozgar AI</h1>
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.push('/customer/dashboard')}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               My Dashboard
             </button>
-            <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+            <button onClick={handleLogout} className="text-sm text-muted hover:text-primary">
               Sign Out
             </button>
           </div>
@@ -102,50 +102,50 @@ export default function PostJob({ profile }) {
 
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-1">Post a Job</h2>
-          <p className="text-sm text-gray-600 mb-6">Describe the work and AI will match it with the right workers.</p>
+          <p className="text-sm text-muted mb-6">Describe the work and AI will match it with the right workers.</p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+              <label className="block text-sm font-medium text-body mb-1">Job Title</label>
               <input
                 value={form.title}
                 onChange={(e) => setForm(f => ({ ...f, title: e.target.value }))}
                 placeholder="e.g. Electrician for home wiring"
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <label className="block text-sm font-medium text-body mb-1">Category</label>
               <input
                 value={form.category}
                 onChange={(e) => setForm(f => ({ ...f, category: e.target.value }))}
                 placeholder="e.g. electrician, plumber, driver"
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-body mb-1">Description</label>
               <textarea
                 value={form.description}
                 onChange={(e) => setForm(f => ({ ...f, description: e.target.value }))}
                 rows={4}
                 placeholder="Describe the work, requirements, and timing..."
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Budget (PKR)</label>
+                <label className="block text-sm font-medium text-body mb-1">Budget (PKR)</label>
                 <input
                   type="number"
                   value={form.budget}
                   onChange={(e) => setForm(f => ({ ...f, budget: e.target.value }))}
                   placeholder="e.g. 5000"
-                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm"
                 />
               </div>
               <LocationPicker
@@ -158,7 +158,7 @@ export default function PostJob({ profile }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
+              className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 text-sm font-medium"
             >
               {loading ? 'Posting...' : 'Post Job'}
             </button>

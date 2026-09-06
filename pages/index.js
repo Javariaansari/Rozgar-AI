@@ -76,26 +76,26 @@ export async function getServerSideProps(context) {
 export default function Home({ stats, testimonials }) {
   return (
     <div className="min-h-screen bg-white">
-      <nav className="border-b border-gray-100">
+      <nav className="border-b border-line">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-blue-700">
+          <Link href="/" className="text-xl font-bold text-primary">
             Rozgar AI
           </Link>
-          <div className="hidden md:flex items-center gap-6 text-sm text-gray-600">
-            <a href="#how-it-works" className="hover:text-gray-900">How It Works</a>
-            <a href="#features" className="hover:text-gray-900">Services</a>
-            <a href="#about" className="hover:text-gray-900">About Us</a>
+          <div className="hidden md:flex items-center gap-6 text-sm text-muted">
+            <a href="#how-it-works" className="hover:text-primary">How It Works</a>
+            <a href="#features" className="hover:text-primary">Services</a>
+            <a href="#about" className="hover:text-primary">About Us</a>
           </div>
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              className="px-4 py-2 text-sm font-medium text-body hover:text-primary"
             >
               Login
             </Link>
             <Link
               href="/signup"
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+              className="px-4 py-2 text-sm font-medium text-white bg-primary rounded hover:bg-primary-dark"
             >
               Sign Up
             </Link>
@@ -104,35 +104,35 @@ export default function Home({ stats, testimonials }) {
       </nav>
 
       <section className="max-w-6xl mx-auto px-4 py-16 md:py-24 text-center">
-        <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 leading-tight">
+        <h1 className="text-3xl md:text-5xl font-extrabold text-heading leading-tight">
           Ghar Baithe Verified Workers Dhoondhein Ya Rozgar Hasil Karein
         </h1>
-        <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="mt-4 text-lg text-muted max-w-2xl mx-auto">
           AI-powered matching aapko sahi worker ya sahi customer se jaldi aur bharosa mandi se milata hai.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/signup?role=customer"
-            className="w-full sm:w-auto px-6 py-3 text-base font-medium text-white bg-blue-600 rounded hover:bg-blue-700"
+            className="w-full sm:w-auto px-6 py-3 text-base font-medium text-white bg-primary rounded hover:bg-primary-dark"
           >
             As a Customer Join Karein
           </Link>
           <Link
             href="/signup?role=worker"
-            className="w-full sm:w-auto px-6 py-3 text-base font-medium text-blue-700 bg-blue-50 rounded hover:bg-blue-100"
+            className="w-full sm:w-auto px-6 py-3 text-base font-medium text-primary bg-navy-50 rounded hover:bg-navy-100"
           >
             As a Worker Join Karein
           </Link>
         </div>
       </section>
 
-      <section id="how-it-works" className="bg-gray-50 py-16">
+      <section id="how-it-works" className="bg-page-bg py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900">How It Works</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-heading">How It Works</h2>
           <div className="mt-10 grid md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-bold text-blue-700">For Customers</h3>
-              <ol className="mt-4 space-y-3 text-gray-700 text-sm list-decimal list-inside">
+              <h3 className="text-lg font-bold text-primary">For Customers</h3>
+              <ol className="mt-4 space-y-3 text-body text-sm list-decimal list-inside">
                 <li>Job post karein — text ya awaz ke zariye.</li>
                 <li>AI aapke liye best workers match karega.</li>
                 <li>Worker select karein aur kaam shuru karein.</li>
@@ -140,7 +140,7 @@ export default function Home({ stats, testimonials }) {
             </div>
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-bold text-green-700">For Workers</h3>
-              <ol className="mt-4 space-y-3 text-gray-700 text-sm list-decimal list-inside">
+              <ol className="mt-4 space-y-3 text-body text-sm list-decimal list-inside">
                 <li>Voice onboarding se profile banayein.</li>
                 <li>Digital Skill Passport mein skills aur rating dikhein.</li>
                 <li>Matching jobs apply karein aur kam hasil karein.</li>
@@ -152,32 +152,32 @@ export default function Home({ stats, testimonials }) {
 
       <section id="features" className="py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900">Key Features</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-heading">Key Features</h2>
           <div className="mt-10 grid md:grid-cols-3 gap-6">
-            <div className="border border-gray-200 rounded-lg p-6 text-center">
-              <div className="w-12 h-12 mx-auto bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xl font-bold">
+            <div className="border border-line rounded-lg p-6 text-center">
+              <div className="w-12 h-12 mx-auto bg-navy-100 text-primary rounded-full flex items-center justify-center text-xl font-bold">
                 MIC
               </div>
-              <h3 className="mt-4 font-bold text-gray-900">Voice Onboarding</h3>
-              <p className="mt-2 text-sm text-gray-600">
+              <h3 className="mt-4 font-bold text-heading">Voice Onboarding</h3>
+              <p className="mt-2 text-sm text-muted">
                 Bol kar profile aur job posting banayein. Roman Urdu aur Urdu dono support hain.
               </p>
             </div>
-            <div className="border border-gray-200 rounded-lg p-6 text-center">
+            <div className="border border-line rounded-lg p-6 text-center">
               <div className="w-12 h-12 mx-auto bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xl font-bold">
                 AI
               </div>
-              <h3 className="mt-4 font-bold text-gray-900">AI Skill Assessment</h3>
-              <p className="mt-2 text-sm text-gray-600">
+              <h3 className="mt-4 font-bold text-heading">AI Skill Assessment</h3>
+              <p className="mt-2 text-sm text-muted">
                 AI-verified skills aur trustworthy workers ki pehchaan.
               </p>
             </div>
-            <div className="border border-gray-200 rounded-lg p-6 text-center">
+            <div className="border border-line rounded-lg p-6 text-center">
               <div className="w-12 h-12 mx-auto bg-yellow-100 text-yellow-700 rounded-full flex items-center justify-center text-xl font-bold">
                 ID
               </div>
-              <h3 className="mt-4 font-bold text-gray-900">Digital Skill Passport</h3>
-              <p className="mt-2 text-sm text-gray-600">
+              <h3 className="mt-4 font-bold text-heading">Digital Skill Passport</h3>
+              <p className="mt-2 text-sm text-muted">
                 Worker ki verified profile, ratings, aur reviews sab ek jagah.
               </p>
             </div>
@@ -185,25 +185,25 @@ export default function Home({ stats, testimonials }) {
         </div>
       </section>
 
-      <section id="about" className="bg-gray-50 py-16">
+      <section id="about" className="bg-page-bg py-16">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Trusted by Workers & Customers</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-heading">Trusted by Workers & Customers</h2>
           <div className="mt-8 flex flex-wrap justify-center gap-8">
             <div>
-              <p className="text-3xl font-bold text-blue-700">
+              <p className="text-3xl font-bold text-primary">
                 {stats.verifiedWorkers > 0 ? `${stats.verifiedWorkers}+` : stats.verifiedWorkers}
               </p>
-              <p className="text-sm text-gray-600">Verified Workers</p>
+              <p className="text-sm text-muted">Verified Workers</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-blue-700">
+              <p className="text-3xl font-bold text-primary">
                 {stats.completedJobs > 0 ? `${stats.completedJobs.toLocaleString()}+` : stats.completedJobs}
               </p>
-              <p className="text-sm text-gray-600">Completed Jobs</p>
+              <p className="text-sm text-muted">Completed Jobs</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-blue-700">{stats.averageRating}/5</p>
-              <p className="text-sm text-gray-600">Average Rating</p>
+              <p className="text-3xl font-bold text-primary">{stats.averageRating}/5</p>
+              <p className="text-sm text-muted">Average Rating</p>
             </div>
           </div>
           <div className="mt-10 grid md:grid-cols-2 gap-6 text-left">
@@ -227,8 +227,8 @@ export default function Home({ stats, testimonials }) {
                 ]
             ).map((t) => (
               <div key={t.id} className="bg-white rounded-lg shadow p-5">
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">"{t.content}"</p>
-                <p className="mt-3 text-sm font-medium text-gray-900">
+                <p className="text-sm text-body whitespace-pre-wrap">"{t.content}"</p>
+                <p className="mt-3 text-sm font-medium text-heading">
                   — {t.name}, {t.role === 'worker' ? 'Worker' : 'Customer'}
                 </p>
               </div>
@@ -238,13 +238,13 @@ export default function Home({ stats, testimonials }) {
         </div>
       </section>
 
-      <footer className="border-t border-gray-100 py-10">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-600">
+      <footer className="border-t border-line py-10">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted">
           <p>© {new Date().getFullYear()} Rozgar AI. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="/support" className="hover:text-gray-900">Support</Link>
-            <Link href="/privacy" className="hover:text-gray-900">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-gray-900">Terms of Service</Link>
+            <Link href="/support" className="hover:text-primary">Support</Link>
+            <Link href="/privacy" className="hover:text-primary">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-primary">Terms of Service</Link>
           </div>
         </div>
       </footer>

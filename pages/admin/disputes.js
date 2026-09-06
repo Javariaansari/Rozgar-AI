@@ -11,10 +11,10 @@ const STATUS_TABS = [
 ]
 
 const STATUS_BADGES = {
-  open: 'bg-blue-100 text-blue-800',
+  open: 'bg-navy-100 text-navy-900',
   under_review: 'bg-yellow-100 text-yellow-800',
   resolved: 'bg-green-100 text-green-800',
-  rejected: 'bg-gray-100 text-gray-800',
+  rejected: 'bg-navy-100 text-heading',
 }
 
 export default function AdminDisputes({ profile }) {
@@ -98,8 +98,8 @@ export default function AdminDisputes({ profile }) {
             onClick={() => setStatus(tab.key)}
             className={`px-3 py-1.5 rounded text-sm font-medium transition ${
               status === tab.key
-                ? 'bg-blue-50 text-blue-700'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
+                ? 'bg-navy-50 text-primary'
+                : 'bg-white text-muted hover:bg-navy-100'
             }`}
           >
             {tab.label}
@@ -108,28 +108,28 @@ export default function AdminDisputes({ profile }) {
       </div>
 
       {loading && disputes.length === 0 ? (
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-muted">Loading...</p>
       ) : disputes.length === 0 ? (
-        <p className="text-gray-500">No disputes found.</p>
+        <p className="text-muted">No disputes found.</p>
       ) : (
         <div className="space-y-4">
           {disputes.map((d) => (
             <div key={d.id} className="bg-white rounded-lg shadow p-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                 <div>
-                  <div className="font-semibold text-gray-900">{d.job?.title || 'Unknown job'}</div>
-                  <div className="text-xs text-gray-500">
+                  <div className="font-semibold text-heading">{d.job?.title || 'Unknown job'}</div>
+                  <div className="text-xs text-muted">
                     Job status:{' '}
-                    <span className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_BADGES[d.job?.status] || 'bg-gray-100 text-gray-800'}`}>
+                    <span className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_BADGES[d.job?.status] || 'bg-navy-100 text-heading'}`}>
                       {d.job?.status || 'unknown'}
                     </span>
                   </div>
                 </div>
                 <div className="text-right sm:text-left">
-                  <span className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_BADGES[d.status] || 'bg-gray-100 text-gray-800'}`}>
+                  <span className={`text-xs px-2 py-0.5 rounded font-medium ${STATUS_BADGES[d.status] || 'bg-navy-100 text-heading'}`}>
                     {d.status === 'under_review' ? 'under review' : d.status}
                   </span>
-                  <div className="text-xs text-gray-400 mt-1">
+                  <div className="text-xs text-subtle mt-1">
                     {new Date(d.created_at).toLocaleString()}
                   </div>
                 </div>
@@ -137,32 +137,32 @@ export default function AdminDisputes({ profile }) {
 
               <div className="grid sm:grid-cols-2 gap-4 mb-3 text-sm">
                 <div>
-                  <span className="text-gray-500">Raised by:</span>{' '}
-                  <span className="font-medium text-gray-900">
+                  <span className="text-muted">Raised by:</span>{' '}
+                  <span className="font-medium text-heading">
                     {d.raiser?.name || d.raiser?.email || 'Unknown'}
                   </span>
-                  <span className="text-xs text-gray-500 ml-1">({d.raiser?.role})</span>
+                  <span className="text-xs text-muted ml-1">({d.raiser?.role})</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">Against:</span>{' '}
-                  <span className="font-medium text-gray-900">
+                  <span className="text-muted">Against:</span>{' '}
+                  <span className="font-medium text-heading">
                     {d.against?.name || d.against?.email || 'Unknown'}
                   </span>
-                  <span className="text-xs text-gray-500 ml-1">({d.against?.role})</span>
+                  <span className="text-xs text-muted ml-1">({d.against?.role})</span>
                 </div>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 rounded p-3 mb-4">
-                <div className="text-xs text-gray-500 uppercase tracking-wide mb-1">Reason</div>
-                <p className="text-sm text-gray-800 whitespace-pre-wrap">{d.reason}</p>
+              <div className="bg-page-bg border border-line rounded p-3 mb-4">
+                <div className="text-xs text-muted uppercase tracking-wide mb-1">Reason</div>
+                <p className="text-sm text-heading whitespace-pre-wrap">{d.reason}</p>
               </div>
 
               {d.resolution_note && (
                 <div className="bg-green-50 border border-green-100 rounded p-3 mb-4">
                   <div className="text-xs text-green-700 uppercase tracking-wide mb-1">Resolution note</div>
-                  <p className="text-sm text-gray-800 whitespace-pre-wrap">{d.resolution_note}</p>
+                  <p className="text-sm text-heading whitespace-pre-wrap">{d.resolution_note}</p>
                   {d.resolved_at && (
-                    <div className="text-xs text-gray-500 mt-1">
+                    <div className="text-xs text-muted mt-1">
                       Resolved {new Date(d.resolved_at).toLocaleString()}
                     </div>
                   )}
@@ -171,12 +171,12 @@ export default function AdminDisputes({ profile }) {
 
               <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
                 <div className="w-full sm:w-48">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Status</label>
+                  <label className="block text-xs font-medium text-body mb-1">Status</label>
                   <select
                     value={d._status ?? d.status}
                     onChange={(e) => updateField(d, '_status', e.target.value)}
                     disabled={savingId === d.id}
-                    className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                   >
                     <option value="open">Open</option>
                     <option value="under_review">Under Review</option>
@@ -185,20 +185,20 @@ export default function AdminDisputes({ profile }) {
                   </select>
                 </div>
                 <div className="flex-1 w-full">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Resolution note</label>
+                  <label className="block text-xs font-medium text-body mb-1">Resolution note</label>
                   <input
                     type="text"
                     value={d._resolution_note ?? d.resolution_note ?? ''}
                     onChange={(e) => updateField(d, '_resolution_note', e.target.value)}
                     disabled={savingId === d.id}
                     placeholder={(d._status ?? d.status) === 'resolved' || (d._status ?? d.status) === 'rejected' ? 'Required' : 'Optional'}
-                    className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
                   />
                 </div>
                 <button
                   onClick={() => saveDispute(d)}
                   disabled={savingId === d.id}
-                  className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                  className="px-4 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark disabled:opacity-50"
                 >
                   {savingId === d.id ? 'Saving...' : 'Save'}
                 </button>
@@ -210,17 +210,17 @@ export default function AdminDisputes({ profile }) {
             <button
               onClick={() => fetchDisputes(page - 1)}
               disabled={page <= 1 || loading}
-              className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+              className="px-3 py-1.5 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
             >
               Previous
             </button>
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-muted">
               Page {page} of {totalPages} ({total} total)
             </span>
             <button
               onClick={() => fetchDisputes(page + 1)}
               disabled={page >= totalPages || loading}
-              className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+              className="px-3 py-1.5 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
             >
               Next
             </button>

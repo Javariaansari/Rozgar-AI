@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 const LocationPickerMap = dynamic(() => import('./LocationPickerMap'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[280px] bg-gray-100 rounded border border-gray-300 animate-pulse" />
+    <div className="w-full h-[280px] bg-navy-100 rounded border border-line-strong animate-pulse" />
   ),
 })
 
@@ -109,7 +109,7 @@ export default function LocationPicker({ value, onChange, required = false }) {
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">
+      <label className="block text-sm font-medium text-body">
         Location {required && <span className="text-red-500">*</span>}
       </label>
 
@@ -118,21 +118,21 @@ export default function LocationPicker({ value, onChange, required = false }) {
         onChange={handleLocationChange}
         placeholder="e.g. Lahore, Model Town"
         required={required}
-        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+        className="w-full px-3 py-2 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm"
       />
 
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={() => setShowMap((s) => !s)}
-          className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-xs font-medium hover:bg-gray-200"
+          className="px-3 py-1.5 bg-navy-100 text-body rounded text-xs font-medium hover:bg-navy-200"
         >
           {showMap ? 'Hide map' : '🗺️ Pick on map'}
         </button>
         <button
           type="button"
           onClick={handleUseLocation}
-          className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded text-xs font-medium hover:bg-gray-200"
+          className="px-3 py-1.5 bg-navy-100 text-body rounded text-xs font-medium hover:bg-navy-200"
         >
           📍 Use my location
         </button>
@@ -148,7 +148,7 @@ export default function LocationPicker({ value, onChange, required = false }) {
       </div>
 
       {Number.isFinite(latitude) && Number.isFinite(longitude) && (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted">
           Pin: {latitude.toFixed(5)}, {longitude.toFixed(5)}
         </p>
       )}
@@ -163,26 +163,26 @@ export default function LocationPicker({ value, onChange, required = false }) {
               onChange={(e) => setSearch(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
               placeholder="Search city or area"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-line-strong rounded text-sm focus:outline-none focus:ring-2 focus:ring-accent"
             />
             <button
               type="button"
               onClick={handleSearch}
               disabled={isSearching || !search.trim()}
-              className="px-3 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+              className="px-3 py-2 bg-primary text-white rounded text-sm font-medium hover:bg-primary-dark disabled:opacity-50"
             >
               {isSearching ? '...' : 'Search'}
             </button>
           </div>
 
           {searchResults.length > 0 && (
-            <div className="border border-gray-200 rounded divide-y divide-gray-100 bg-white">
+            <div className="border border-line rounded divide-y divide-line bg-white">
               {searchResults.map((result, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => selectResult(result)}
-                  className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-50"
+                  className="w-full text-left px-3 py-2 text-xs text-body hover:bg-navy-50"
                 >
                   {result.name}
                 </button>

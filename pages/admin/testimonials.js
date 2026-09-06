@@ -95,8 +95,8 @@ export default function AdminTestimonials({ profile }) {
             onClick={() => setStatus(tab.key)}
             className={`px-3 py-1.5 rounded text-sm font-medium transition ${
               status === tab.key
-                ? 'bg-blue-50 text-blue-700'
-                : 'bg-white text-gray-600 hover:bg-gray-100'
+                ? 'bg-navy-50 text-primary'
+                : 'bg-white text-muted hover:bg-navy-100'
             }`}
           >
             {tab.label}
@@ -105,34 +105,34 @@ export default function AdminTestimonials({ profile }) {
       </div>
 
       {loading && testimonials.length === 0 ? (
-        <p className="text-gray-500">Loading...</p>
+        <p className="text-muted">Loading...</p>
       ) : testimonials.length === 0 ? (
-        <p className="text-gray-500">No {status} feedback found.</p>
+        <p className="text-muted">No {status} feedback found.</p>
       ) : (
         <div className="space-y-4">
           {testimonials.map((t) => (
             <div key={t.id} className="bg-white rounded-lg shadow p-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                 <div>
-                  <div className="font-semibold text-gray-900">{t.name}</div>
-                  <div className="text-xs text-gray-500 capitalize">{t.role}</div>
+                  <div className="font-semibold text-heading">{t.name}</div>
+                  <div className="text-xs text-muted capitalize">{t.role}</div>
                 </div>
                 <div className="text-right sm:text-left">
                   <div className="text-yellow-400 text-sm">
                     {'★'.repeat(t.stars || 0)}
-                    <span className="text-gray-300">{'★'.repeat(5 - (t.stars || 0))}</span>
+                    <span className="text-navy-200">{'★'.repeat(5 - (t.stars || 0))}</span>
                   </div>
-                  <div className="text-xs text-gray-400 mt-1">
+                  <div className="text-xs text-subtle mt-1">
                     {new Date(t.created_at).toLocaleString()}
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 rounded p-3 mb-4">
-                <p className="text-sm text-gray-800 whitespace-pre-wrap">{t.content}</p>
+              <div className="bg-page-bg border border-line rounded p-3 mb-4">
+                <p className="text-sm text-heading whitespace-pre-wrap">{t.content}</p>
               </div>
 
-              <div className="text-xs text-gray-500 mb-4">
+              <div className="text-xs text-muted mb-4">
                 By: {t.user?.name || t.user?.email || 'Unknown'} ({t.user?.role || 'unknown'})
               </div>
 
@@ -170,17 +170,17 @@ export default function AdminTestimonials({ profile }) {
             <button
               onClick={() => fetchTestimonials(page - 1)}
               disabled={page <= 1 || loading}
-              className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+              className="px-3 py-1.5 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
             >
               Previous
             </button>
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-muted">
               Page {page} of {totalPages} ({total} total)
             </span>
             <button
               onClick={() => fetchTestimonials(page + 1)}
               disabled={page >= totalPages || loading}
-              className="px-3 py-1.5 bg-gray-200 text-gray-700 rounded text-sm font-medium hover:bg-gray-300 disabled:opacity-50"
+              className="px-3 py-1.5 bg-navy-100 text-body rounded text-sm font-medium hover:bg-navy-200 disabled:opacity-50"
             >
               Next
             </button>

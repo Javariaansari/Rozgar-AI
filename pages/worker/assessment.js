@@ -176,11 +176,11 @@ export default function Assessment({ profile, workerProfile }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-page-bg">
       <nav className="bg-white shadow-sm">
         <div className="max-w-3xl mx-auto px-4 py-3 flex justify-between items-center">
           <h1 className="text-xl font-bold">Rozgar AI</h1>
-          <button onClick={handleLogout} className="text-sm text-gray-600 hover:text-gray-900">
+          <button onClick={handleLogout} className="text-sm text-muted hover:text-primary">
             Sign Out
           </button>
         </div>
@@ -194,19 +194,19 @@ export default function Assessment({ profile, workerProfile }) {
             <h2 className="text-lg font-semibold">AI Skill Assessment</h2>
             <button
               onClick={() => router.push('/worker/dashboard')}
-              className="text-sm text-blue-600 hover:underline"
+              className="text-sm text-primary hover:underline"
             >
               Back to Dashboard
             </button>
           </div>
 
-          <div className="mb-6 p-4 bg-blue-50 border border-blue-100 rounded">
-            <h3 className="font-medium text-blue-900 mb-1">{profile?.name || 'Worker Profile'}</h3>
-            <p className="text-sm text-blue-800">
+          <div className="mb-6 p-4 bg-navy-50 border border-navy-200 rounded">
+            <h3 className="font-medium text-navy-950 mb-1">{profile?.name || 'Worker Profile'}</h3>
+            <p className="text-sm text-navy-900">
               Skills: {workerProfile?.skills?.join(', ') || 'general labor'}
             </p>
             {workerProfile?.experience_years != null && (
-              <p className="text-sm text-blue-800 mt-1">
+              <p className="text-sm text-navy-900 mt-1">
                 Experience: {workerProfile.experience_years} years
               </p>
             )}
@@ -218,32 +218,32 @@ export default function Assessment({ profile, workerProfile }) {
               <div className="space-y-2 mb-3">
                 {Object.entries(scores).map(([skill, score]) => (
                   <div key={skill} className="flex items-center gap-3 text-sm">
-                    <span className="text-gray-700 w-28">{skill}</span>
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <span className="text-body w-28">{skill}</span>
+                    <div className="flex-1 bg-navy-100 rounded-full h-2">
                       <div className="bg-green-600 h-2 rounded-full" style={{ width: `${score}%` }} />
                     </div>
-                    <span className="text-xs text-gray-600 w-8">{score}</span>
+                    <span className="text-xs text-muted w-8">{score}</span>
                   </div>
                 ))}
               </div>
-              {feedback && <p className="text-sm text-gray-700 italic">{feedback}</p>}
+              {feedback && <p className="text-sm text-body italic">{feedback}</p>}
             </div>
           )}
 
           {speechSupported && questions.length > 0 && (
-            <div className="mb-4 flex flex-wrap items-center gap-3 p-3 bg-blue-50 border border-blue-100 rounded">
-              <span className="text-sm text-blue-900 font-medium">Answer by voice:</span>
+            <div className="mb-4 flex flex-wrap items-center gap-3 p-3 bg-navy-50 border border-navy-200 rounded">
+              <span className="text-sm text-navy-950 font-medium">Answer by voice:</span>
               <select
                 value={speechLang}
                 onChange={(e) => setSpeechLang(e.target.value)}
                 disabled={recordingIndex !== null}
-                className="px-3 py-1.5 border border-gray-300 rounded text-sm bg-white disabled:opacity-50"
+                className="px-3 py-1.5 border border-line-strong rounded text-sm bg-white disabled:opacity-50"
               >
                 <option value="en-IN">English + Roman Urdu (en-IN)</option>
                 <option value="ur-PK">Urdu (ur-PK)</option>
                 <option value="en-US">English (en-US)</option>
               </select>
-              <span className="text-xs text-blue-700">Click the mic button next to each answer to record.</span>
+              <span className="text-xs text-primary">Click the mic button next to each answer to record.</span>
             </div>
           )}
 
@@ -252,7 +252,7 @@ export default function Assessment({ profile, workerProfile }) {
               <button
                 onClick={startAssessment}
                 disabled={loading}
-                className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
+                className="w-full py-2 px-4 bg-primary text-white rounded hover:bg-primary-dark disabled:opacity-50 text-sm font-medium"
               >
                 {loading ? 'Preparing Questions...' : scores ? 'Retake Assessment' : 'Start Assessment'}
               </button>
@@ -266,7 +266,7 @@ export default function Assessment({ profile, workerProfile }) {
                   </button>
                   <button
                     onClick={() => router.push('/worker/dashboard')}
-                    className="w-full py-2 px-4 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-sm font-medium"
+                    className="w-full py-2 px-4 bg-navy-100 text-body rounded hover:bg-navy-200 text-sm font-medium"
                   >
                     Go to Dashboard
                   </button>
@@ -277,10 +277,10 @@ export default function Assessment({ profile, workerProfile }) {
             <div className="space-y-4">
               {questions.map((q, i) => (
                 <div key={i}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-body mb-1">
                     {i + 1}. {q.question}
                   </label>
-                  <span className="inline-block text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded mb-2">
+                  <span className="inline-block text-xs bg-navy-100 text-navy-900 px-2 py-0.5 rounded mb-2">
                     {q.skill}
                   </span>
                   <div className="relative">
@@ -289,7 +289,7 @@ export default function Assessment({ profile, workerProfile }) {
                       onChange={(e) => updateAnswer(i, e.target.value)}
                       rows={3}
                       placeholder="Type your answer here or use the mic..."
-                      className="w-full px-3 py-2 pr-10 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      className="w-full px-3 py-2 pr-10 border border-line-strong rounded focus:outline-none focus:ring-2 focus:ring-accent text-sm"
                     />
                     {speechSupported && (
                       <button
@@ -299,7 +299,7 @@ export default function Assessment({ profile, workerProfile }) {
                         className={`absolute right-2 bottom-2 p-1.5 rounded-full transition disabled:opacity-40 ${
                           recordingIndex === i
                             ? 'bg-red-100 text-red-600 animate-pulse'
-                            : 'bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600'
+                            : 'bg-navy-100 text-muted hover:bg-navy-100 hover:text-primary'
                         }`}
                         title={recordingIndex === i ? 'Stop recording' : 'Record answer'}
                       >
@@ -318,7 +318,7 @@ export default function Assessment({ profile, workerProfile }) {
                   {recordingIndex === i && (
                     <div className="mt-1 flex items-center gap-2 text-xs text-red-600">
                       <span className="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                      Recording... {interimAnswer && <span className="text-gray-500">{interimAnswer}</span>}
+                      Recording... {interimAnswer && <span className="text-muted">{interimAnswer}</span>}
                     </div>
                   )}
                 </div>
